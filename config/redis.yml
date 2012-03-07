@@ -1,0 +1,4 @@
+
+development: 172.16.127.1:6379
+test:        172.16.127.1:6379
+production:  localhost:6379
