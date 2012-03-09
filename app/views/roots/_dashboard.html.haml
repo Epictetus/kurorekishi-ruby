@@ -41,3 +41,8 @@
               = content_tag :span, '---', :id => 'expired_at'
         .help-link
           = link_to '失効期限を延長する', '#', :id => 'renew'
+
+%section
+  .row-fluid
+    .span12
+      = render :partial => 'layouts/scripts/adsense_body'

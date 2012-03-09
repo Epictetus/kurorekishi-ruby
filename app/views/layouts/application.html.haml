@@ -8,9 +8,8 @@
     = tag(:meta, :name => 'apple-mobile-web-app-status-bar-style', :content => 'black-translucent')
     = csrf_meta_tags
     :javascript
-      $(document).bind('load', function() { setTimeout(function() { window.scrollTo(0, 1) }, 1); });
+      $(window).bind('load', function() { setTimeout(function() { window.scrollTo(0, 1) }, 1); });
   %body
-    = render :partial => 'layouts/scripts/adsense_top'
     .container-fluid
       = yield
     = yield :scripts
