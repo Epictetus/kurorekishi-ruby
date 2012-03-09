@@ -4,29 +4,29 @@ role :app, 'kurorekishi'
 role :db,  'kurorekishi', :primary => true
 
 set :scm,         :git
-set :user,        "app"
+set :user,        'app'
 set :use_sudo,    false
 
 set :branch,      'develop'
-set :repository,  "/Users/cohakim/Dropbox/Projects/Rails/kurorekishi"
+set :repository,  '/Users/cohakim/Dropbox/Projects/Rails/kurorekishi'
 set :deploy_via,  :copy
-set :deploy_to,   "/var/www/app/kurorekishi"
+set :deploy_to,   '/var/www/app/kurorekishi'
 
 # for asset pipeline
 set :normalize_asset_timestamps, false
 
 # for bundler
-require "bundler/capistrano"
-set :bundle_gemfile,  "Gemfile"
+require 'bundler/capistrano'
+set :bundle_gemfile,  'Gemfile'
 set :bundle_dir,      File.join(fetch(:shared_path), 'bundle')
-set :bundle_flags,    "--quiet"
+set :bundle_flags,    '--quiet'
 set :bundle_without,  [:development, :test]
-set :bundle_cmd,      "bundle"
+set :bundle_cmd,      'bundle'
 set :bundle_roles,    [:app]
 
 # for unicorn
 set :rails_env, :production
-set :unicorn_binary, "bundle exec unicorn_rails"
+set :unicorn_binary, 'bundle exec unicorn_rails'
 set :unicorn_config, "#{current_path}/config/unicorn.rb"
 set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 
