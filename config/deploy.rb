@@ -47,6 +47,9 @@ namespace :app do
     stop
     start
   end
+  task :precompile, :roles => :app, :except => { :no_release => true } do
+    run "cd #{current_path} && bundle exec rake assets:precompile"
+  end
 end
 
 after 'deploy:symlink' do
