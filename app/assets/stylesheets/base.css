@@ -7,6 +7,11 @@ input {
   -webkit-user-select: auto;
 }
 
+.ad {
+  margin: 0;
+  margin-bottom: 5px;
+}
+
 .help-link {
   font-size: 11px;
   line-height: 11px;
@@ -18,4 +23,16 @@ input {
 
 .help-link a {
   text-decoration: underline;
+}
+
+.bookmark {
+  text-align: center;
+}
+
+.bookmark .service ul, .bookmark .service li {
+  display: inline;
+}
+
+iframe.twitter-share-button {
+  width: 90px !important;
 }

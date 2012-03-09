@@ -13,7 +13,7 @@
             .input-prepend
               %span.add-on
                 ＠
-              %input#sign_name_t.span2{autofocus:true,style:'width:213px;'}
+              %input#sign_name_t.span2{autocapitalize:'off',autofocus:true,style:'width:213px;'}
             %p.help-inline
               確認のためTwiter IDを入力してください
         .help-link
@@ -28,7 +28,7 @@
             .input-prepend
               %span.add-on
                 ＠
-              %input.span2{value:@user_profile[:twitter_screen_name],readonly:true,style:'width:213px;'}
+              %input.span2{value:@user_profile[:twitter_screen_name],autocapitalize:'off',readonly:true,style:'width:213px;'}
           .status{style:'text-align:center;'}
             %span.label.label-info<
               = ' 削除数:'
@@ -42,7 +42,3 @@
         .help-link
           = link_to '失効期限を延長する', '#', :id => 'renew'
 
-%section
-  .row-fluid
-    .span12
-      = render :partial => 'layouts/scripts/adsense_body'

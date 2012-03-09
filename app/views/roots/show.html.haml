@@ -2,21 +2,18 @@
 - if @authorized
   = render :partial => 'roots/scripts/operations'
 
-%section
-  .row-fluid
-    .span12
-      = render :partial => 'layouts/scripts/adsense_top'
-
 %header#overview.jumbotron.subhead
-  .row-fluid
-    .span12
-      %h1
-        黒歴史クリーナー
-      %p.lead
-        あなたの黒歴史を完全消去
-        = link_to '', '', :class => 'icon-question-sign icon-white'
+  %h1
+    黒歴史クリーナー
+  %p.lead
+    あなたの黒歴史を完全消去
+    = link_to '', '', :class => 'icon-info-sign icon-white'
 
 - if !@queued && !@authorized
   = render :partial => 'login'
 - else
   = render :partial => 'dashboard'
+
+%footer.footer
+  %p
+    © 2012 <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a> All Rights Reserved.
