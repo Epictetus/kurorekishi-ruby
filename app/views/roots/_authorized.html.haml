@@ -1,0 +1,38 @@
+
+%section#request{style:"display:#{@queued ? 'none' : 'normal'};"}
+  .row-fluid
+    .span12
+      .well
+        #control_group_t.control-group
+          .controls
+            .input-prepend
+              %span.add-on
+                ＠
+              %input#sign_name_t.span2{autofocus:true,style:'width:213px;'}
+            %p.help-inline
+              確認のためTwiter IDを入力してください
+        .help-link
+          = link_to '>> ステータス表示に戻る', '#', :id => 'back', :style => 'display:none;'
+
+%section#status{style:"display:#{@queued ? 'normal' : 'none'};"}
+  .row-fluid
+    .span12
+      .well
+        .control-group
+          .controls
+            .input-prepend
+              %span.add-on
+                ＠
+              %input.span2{value:@user_profile[:twitter_screen_name],readonly:true,style:'width:213px;'}
+          .status{style:'text-align:center;'}
+            %span.label.label-info<
+              = ' 削除数:'
+              = content_tag :span, '---', :id => 'destroy_count'
+            %span.label.label-info<
+              = 'API残:'
+              = content_tag :span, '---', :id => 'remaining_hits'
+            %span.label.label-info<
+              = '失効:'
+              = content_tag :span, '---', :id => 'expired_at'
+        .help-link
+          = link_to '失効期限を延長する', '#', :id => 'renew'

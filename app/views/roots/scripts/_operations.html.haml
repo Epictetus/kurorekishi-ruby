@@ -1,0 +1,104 @@
+
+- content_for :scripts do
+  :javascript
+    var KC = {};
+
+  :javascript
+    KC.request = {
+      destroy: function() {
+        $.ajax({
+          url: '#{clean_path}', type: 'POST', dataType: 'text',
+          statusCode: {
+            200: function() {
+              KC.panel.switch('status');
+            },
+            500: function() {
+              alert('削除リクエストに失敗しました。リロードすると直るかも？');
+            },
+          }
+        });
+      },
+      status: function() {
+        $.ajax({
+          url: '#{stats_path}', type: 'GET', dataType: 'json',
+          success: function(data, status, xhr) {
+            KC.panel.updateStatus(data);
+          },
+          error: function() {
+            alert('ステータスの取得に失敗しました。リロードすると直るかも？');
+          }
+        });
+      }
+    };
+    KC.panel = {
+      status_timer: null,
+      switch: function(context) {
+        if (context == 'status') {
+          $('#request').hide();
+          $('#status').fadeIn();
+        }
+        else if(context == 'request') {
+          $('#sign_name_t').val('');
+          KC.panel.drawNormal();
+          $('#status').hide();
+          $('#request').fadeIn();
+          $('#sign_name_t').focus();
+        }
+        KC.panel.toggleMonitor();
+      },
+      toggleMonitor: function() {
+        if ($('#status').is(':hidden')) {
+          clearInterval(KC.panel.status_timer);
+          KC.panel.status_timer = null;
+        }
+        else {
+          KC.request.status();
+          KC.panel.status_timer = setInterval(function() {
+            KC.request.status();
+          }, 30000);
+        }
+      },
+      updateStatus: function(status) {
+        $('#destroy_count').html(status['destroy_count']);
+        $('#remaining_hits').html(status['remaining_hits']);
+        $('#expired_at').html(status['expired_at']);
+      },
+      drawNormal: function() {
+        $('#control_group_t').removeClass('success').removeClass('error');
+      },
+      drawSuccess: function() {
+        KC.panel.drawNormal();
+        $('#control_group_t').addClass('success');
+      },
+      drawError: function() {
+        KC.panel.drawNormal();
+        $('#control_group_t').addClass('error');
+      }
+    };
+  :javascript
+    $('#sign_name_t').bind('keyup', function() {
+      if ($('#sign_name_t').val() == '') {
+        KC.panel.drawNormal();
+      }
+      else if ($('#sign_name_t').val() == '#{@user_profile[:twitter_screen_name]}') {
+        KC.panel.drawSuccess();
+      }
+      else {
+        KC.panel.drawError();
+      }
+    });
+    $('#sign_name_t').bind('change', function() {
+      if ($('#sign_name_t').val() == '#{@user_profile[:twitter_screen_name]}') {
+        KC.request.destroy();
+      }
+    });
+    $('#renew').bind('click', function() {
+      KC.panel.switch('request');
+      $('#back').show();
+    });
+    $('#back').bind('click', function() {
+      KC.panel.switch('status');
+    });
+    $(document).bind('ready', function() {
+      KC.panel.toggleMonitor();
+    });

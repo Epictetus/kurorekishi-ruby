@@ -1,0 +1,18 @@
+
+- if @authorized
+  = render :partial => 'roots/scripts/operations'
+
+%header#overview.jumbotron.subhead
+  .row-fluid
+    .span12
+      %h1
+        黒歴史クリーナー
+      %p.lead
+        あなたの黒歴史を完全消去
+        = link_to '', '', :class => 'icon-question-sign icon-white'
+
+- if @authorized
+  = render :partial => 'roots/authorized'
+- else
+  = render :partial => 'roots/unauthorized'
+

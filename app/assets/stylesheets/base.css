@@ -1,0 +1,21 @@
+
+* {
+  -webkit-touch-callout: none;
+}
+
+input {
+  -webkit-user-select: auto;
+}
+
+.help-link {
+  font-size: 11px;
+  line-height: 11px;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.help-link a {
+  text-decoration: underline;
+}
