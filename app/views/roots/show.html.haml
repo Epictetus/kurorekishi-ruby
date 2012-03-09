@@ -11,8 +11,7 @@
         あなたの黒歴史を完全消去
         = link_to '', '', :class => 'icon-question-sign icon-white'
 
-- if @authorized
-  = render :partial => 'roots/authorized'
+- if !@queued && !@authorized
+  = render :partial => 'login'
 - else
-  = render :partial => 'roots/unauthorized'
-
+  = render :partial => 'dashboard'

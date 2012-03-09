@@ -1,5 +1,10 @@
 
-%section#request{style:"display:#{@queued ? 'none' : 'normal'};"}
+- if @queued
+  - r = 'none'; s = 'normal';
+- else
+  - r = 'normal'; s = 'none';
+
+%section#request{style:"display:#{r};"}
   .row-fluid
     .span12
       .well
@@ -14,7 +19,7 @@
         .help-link
           = link_to '>> ステータス表示に戻る', '#', :id => 'back', :style => 'display:none;'
 
-%section#status{style:"display:#{@queued ? 'normal' : 'none'};"}
+%section#status{style:"display:#{s};"}
   .row-fluid
     .span12
       .well

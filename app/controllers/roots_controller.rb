@@ -27,6 +27,13 @@ class RootsController < ApplicationController
     end
   end
 
+  def destroy_session
+    reset_session
+    respond_to do |format|
+      format.html { redirect_to root_path }
+    end
+  end
+
   ############################################################################
 
   def clean
