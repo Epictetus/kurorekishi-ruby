@@ -50,11 +50,10 @@ namespace :app do
 end
 
 after 'deploy:symlink' do
-  run "mkdir -p #{current_path}/tmp"
   # unicorn
   run "mkdir -p #{shared_path}/sockets"
-  run "ln -s #{shared_path}/sockets #{current_path}/tmp/sockets"
+  run "ln -s #{shared_path}/sockets #{release_path}/tmp/sockets"
   # assets
   run "mkdir -p #{shared_path}/assets"
-  run "ln -s #{shared_path}/assets #{current_path}/public/assets"
+  run "ln -s #{shared_path}/assets #{release_path}/public/assets"
 end
