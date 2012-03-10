@@ -36,3 +36,18 @@ input {
 iframe.twitter-share-button {
   width: 90px !important;
 }
+
+#info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 120%;
+  height: auto !important;
+  height: 120%;
+  min-width: 100%;
+  width: 100%;
+  background-color: black;
+  filter:alpha(opacity=85);
+  -moz-opacity: 0.85;
+  opacity: 0.85;
+}
