@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+ENV['RAILS_ENV'] ||= 'development'
+require ::File.expand_path('../../config/environment',  __FILE__)
+
+class SchedulerDaemon < DaemonSpawn::Base
+  def start(args)
+    Resque::Scheduler.verbose = true
+    Resque::Scheduler.run
+  end
+
+  def stop
+    Resque::Scheduler.shutdown
+  end
+end
+
+SchedulerDaemon.spawn!({
+  :processes => 1,
+  :log_file => File.join(Rails.root, "log", "scheduler.log"),
+  :pid_file => File.join(Rails.root, 'tmp', 'pids', 'scheduler.pid'),
+  :sync_log => true,
+  :working_dir => Rails.root,
+  :singleton => true
+})

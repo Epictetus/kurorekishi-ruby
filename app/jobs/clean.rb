@@ -2,11 +2,66 @@
 class Clean
   @queue = :cleaner
 
-  def self.perform
-    Bucket.find_in_batches(:batch_size => 100) do |buckets|
-      buckets.each do |job|
-        if job.expired? then job.destroy; return end
-      end
-    end
+  def self.before_enqueue_clean_job
+    Resque.size('cleaner') < Bucket.jobs.count
   end
+
+  def self.perform
+    job = Bucket.jobs.first
+    if job.blank? then return end
+
+    # 期限切れなら削除
+    if job.expired? then job.destroy; return end
+
+    # 最終処理日時を更新
+    job.update_attribute(:last_processed_at, DateTime.now)
+
+    # 削除処理開始 -------------------------------------------------------------
+    twitter = twitter_client(job.token, job.secret)
+
+    # API残確認
+    rest = twitter.rate_limit_status['remaining_hits']
+    if rest == 0 then return end
+
+    # 処理対象のタイムライン取得
+    timeline = twitter.user_timeline(job.serial.to_i, {
+      :max_id    => job.max_id.try(:to_i),
+      :count     => [20, rest].min,
+      :trim_user => true,
+    })
+
+    # max_idの保存
+    if job.max_id.blank?
+      job.update_attribute(:max_id, timeline.first.id)
+    end
+
+    begin
+      # ツイート削除
+      count = 0
+      timeline.each do |status|
+        twitter.status_destroy(status.id, { :trim_user => true })
+        count += 1
+      end
+    ensure
+      # 統計情報更新
+      job.increment!(:destroy_count, count)
+      Stats.store!(job.serial, count)
+    end
+
+    nil
+  end
+
+  ############################################################################
+  protected
+
+  def self.twitter_client(access_token, access_secret)
+    Twitter.configure do |config|
+      config.consumer_key       = configatron.twitter.customer_key
+      config.consumer_secret    = configatron.twitter.password
+      config.oauth_token        = access_token
+      config.oauth_token_secret = access_secret
+    end
+    Twitter.new
+  end
+
 end

@@ -44,7 +44,7 @@ class RootsController < ApplicationController
       :serial => Twitter.user.id,
       :token  => Twitter.options[:oauth_token],
       :secret => Twitter.options[:oauth_token_secret],
-      :last_touched_at => DateTime.now,
+      :expired_at => DateTime.now.plus_with_duration(0.5),
     }
     job.save!
 
@@ -66,7 +66,7 @@ class RootsController < ApplicationController
     stats = {
       :destroy_count  => job.destroy_count,
       :remaining_hits => twitter_from_session.rate_limit_status['remaining_hits'],
-      :expired_at     => job.expired_at,
+      :rest           => job.rest,
     }
 
     respond_to do |format|

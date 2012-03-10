@@ -5,7 +5,9 @@ class CreateBuckets < ActiveRecord::Migration
       t.string   :token,  :null => false
       t.string   :secret, :null => false
       t.integer  :destroy_count, :default => '0'
-      t.datetime :last_touched_at, :null => false
+      t.datetime :expired_at, :null => false
+      t.datetime :last_processed_at
+      t.string   :max_id
 
       t.timestamps
     end

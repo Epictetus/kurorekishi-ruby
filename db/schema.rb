@@ -14,13 +14,15 @@
 ActiveRecord::Schema.define(:version => 20120308070030) do
 
   create_table "buckets", :force => true do |t|
-    t.string   "serial",                         :null => false
-    t.string   "token",                          :null => false
-    t.string   "secret",                         :null => false
-    t.integer  "destroy_count",   :default => 0
-    t.datetime "last_touched_at",                :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.string   "serial",                           :null => false
+    t.string   "token",                            :null => false
+    t.string   "secret",                           :null => false
+    t.integer  "destroy_count",     :default => 0
+    t.datetime "expired_at",                       :null => false
+    t.datetime "last_processed_at"
+    t.string   "max_id"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   add_index "buckets", ["serial"], :name => "index_buckets_on_serial"
