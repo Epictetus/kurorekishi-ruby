@@ -1,0 +1,5 @@
+clean:
+  every: '15s'
+  class: 'Clean'
+  queue: 'cleaner'
+  description: 'Clean Job'

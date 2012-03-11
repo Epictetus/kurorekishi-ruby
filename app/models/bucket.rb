@@ -26,7 +26,6 @@ class Bucket < ActiveRecord::Base
     where("#{c1} OR #{c2}").order('last_processed_at, id')
   }
 
-
   ############################################################################
 
   def expired?
@@ -34,9 +33,7 @@ class Bucket < ActiveRecord::Base
   end
 
   def rest
-    # TODO: 処理を書く
-    '@12H'
-    #'@%sH' % ((expired_at.to_time - Time) / (60 * 60)).ceil
+    '@%sH' % ((expired_at.to_time - Time.now) / (60 * 60)).ceil
   end
 
   ############################################################################
