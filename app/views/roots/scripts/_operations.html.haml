@@ -65,6 +65,10 @@
         $('#destroy_count').html(status['destroy_count']);
         $('#remaining_hits').html(status['remaining_hits']);
         $('#rest').html(status['rest']);
+        if (status['destroy_count'] != 0) {
+          $('#progress').removeClass('progress-danger');
+          $('#progress > .bar').width((status['page'] / 160 * 100) + '%');
+        }
       },
       drawNormal: function() {
         $('#control_group_t').removeClass('success').removeClass('error');

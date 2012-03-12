@@ -51,3 +51,10 @@ iframe.twitter-share-button {
 #help li {
   margin:6px 0px;
 }
+
+#count {
+  text-align: center;
+  font-size: 11px;
+  margin: 0;
+  margin-bottom: 5px;
+}

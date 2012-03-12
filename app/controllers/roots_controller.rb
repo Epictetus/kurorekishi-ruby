@@ -4,6 +4,7 @@ class RootsController < ApplicationController
   ############################################################################
 
   def show
+    set_service_profile
     if authorized? && queued?
       set_user_profile
       @authorized = @queued = true
@@ -67,6 +68,7 @@ class RootsController < ApplicationController
       :destroy_count  => job.destroy_count,
       :remaining_hits => twitter_from_session.rate_limit_status['remaining_hits'],
       :rest           => job.rest,
+      :page           => job.page
     }
 
     respond_to do |format|
@@ -94,6 +96,10 @@ class RootsController < ApplicationController
 
   ############################################################################
   protected
+
+  def set_service_profile
+    @service_profile = Stats.fetch
+  end
 
   def set_twitter_authorize_url
     consumer = consumer_from_configatron
