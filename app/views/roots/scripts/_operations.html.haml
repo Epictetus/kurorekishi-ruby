@@ -13,7 +13,7 @@
               KC.panel.switch('status');
             },
             500: function() {
-              if (confirm('削除リクエストに失敗しました。ログアウトしますか？')) {
+              if (confirm('削除リクエストに失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
                 location.href = '#{reset_session_path}';
               }
             },
@@ -27,7 +27,7 @@
             KC.panel.updateStatus(data);
           },
           error: function() {
-            if (confirm('ステータス情報を取得できませんでした。ログアウトしますか？')) {
+            if (confirm('ステータス情報を取得できませんでした。ログインしなおすとなおるかも？ログアウトしますか？')) {
               location.href = '#{reset_session_path}';
             }
           }

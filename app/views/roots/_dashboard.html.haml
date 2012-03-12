@@ -22,7 +22,7 @@
             %p.help-inline
               確認のためTwiter IDを入力してください
         .help-link
-          = link_to '>> ステータス表示に戻る', '#', :id => 'back', :style => 'display:none;'
+          = link_to '>> ステータス表示に戻る', 'javascript:void(0);', :id => 'back', :style => 'display:none;'
 
 %section#status{style:"display:#{s};"}
   .row-fluid
@@ -47,5 +47,5 @@
               = '失効:'
               = content_tag :span, '---', :id => 'rest'
         .help-link
-          = link_to '失効期限を延長する', '#', :id => 'renew'
+          = link_to '失効期限を延長する', 'javascript:void(0);', :id => 'renew'
 

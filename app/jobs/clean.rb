@@ -9,6 +9,9 @@ class Clean
     # 期限切れなら削除
     if job.expired? then job.destroy; return end
 
+    # 完了済みなら削除
+    if job.done? then job.destroy; return end
+
     # 最終処理日時を更新
     job.update_attribute(:last_processed_at, DateTime.now)
 

@@ -8,11 +8,6 @@
       .well
         = link_to 'Twitterの黒歴史を抹消する', @authorize_url, :class => 'btn btn-primary'
         <br><br>
-        = link_to 'Mixiの黒歴史を抹消する', '#', :class => 'btn disabled'
+        = link_to 'Mixiの黒歴史を抹消する', 'javascript:void(0);', :class => 'btn disabled'
         <br><br>
-        = link_to 'Facebookの黒歴史を抹消する', '#', :class => 'btn disabled'
-
-%section
-  .row-fluid
-    .span12
-      = render :partial => 'roots/scripts/social_bookmarks'
+        = link_to 'Facebookの黒歴史を抹消する', 'javascript:void(0);', :class => 'btn disabled'

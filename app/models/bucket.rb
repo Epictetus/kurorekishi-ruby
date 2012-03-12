@@ -29,6 +29,10 @@ class Bucket < ActiveRecord::Base
 
   ############################################################################
 
+  def done?
+    page > 160
+  end
+
   def expired?
     DateTime.now >= expired_at
   end
