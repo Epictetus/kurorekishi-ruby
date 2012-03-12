@@ -30,6 +30,7 @@ class Clean
     # max_idの保存
     if job.max_id.blank? && timeline.present?
       job.update_attribute(:max_id, timeline.first.id)
+      page = 1
     end
 
     begin

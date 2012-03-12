@@ -33,8 +33,8 @@ set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 namespace :app do
   task :start, :roles => :app, :except => { :no_release => true } do
     run "cd #{current_path} && #{try_sudo} #{unicorn_binary} -c #{unicorn_config} -E #{rails_env} -D"
-    run "cd #{current_path} && script/resque_cleaner start"
-    run "cd #{current_path} && script/resque_scheduler start"
+    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_cleaner start"
+    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_scheduler start"
   end
   task :stop, :roles => :app, :except => { :no_release => true } do
     run "#{try_sudo} kill `cat #{unicorn_pid}`"
