@@ -6,10 +6,11 @@
 #  serial            :string(255)     not null
 #  token             :string(255)     not null
 #  secret            :string(255)     not null
-#  destroy_count     :integer(4)      default(0)
 #  expired_at        :datetime        not null
-#  last_processed_at :datetime
+#  page              :integer(4)      default(1)
 #  max_id            :string(255)
+#  destroy_count     :integer(4)      default(0)
+#  last_processed_at :datetime
 #  created_at        :datetime        not null
 #  updated_at        :datetime        not null
 #

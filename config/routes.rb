@@ -8,7 +8,4 @@ Kurorekishi::Application.routes.draw do
   match 'reset_session' => 'roots#destroy_session', :path => 'reset_session', :as => 'reset_session'
 
   root :to => "roots#show"
-
-  # resque
-  mount Resque::Server.new, :at => "/resque"
 end
