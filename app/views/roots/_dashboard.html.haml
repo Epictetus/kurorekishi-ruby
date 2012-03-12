@@ -1,4 +1,9 @@
 
+- content_for :ad_top do
+  = render :partial => 'layouts/scripts/adsense_top'
+- content_for :ad_middle do
+  = render :partial => 'layouts/scripts/adsense_body'
+
 - if @queued
   - r = 'none'; s = 'normal';
 - else

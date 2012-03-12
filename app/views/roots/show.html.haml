@@ -7,7 +7,7 @@
     黒歴史クリーナー
   %p.lead
     あなたの黒歴史を完全消去
-    = link_to '', '', :class => 'icon-info-sign icon-white'
+    = link_to '', help_path, :class => 'icon-info-sign icon-white', :target => '_blank'
 
 - if !@queued && !@authorized
   = render :partial => 'login'
@@ -17,5 +17,3 @@
 %footer.footer
   %p
     © 2012 <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a> All Rights Reserved.
-
-#info{style:'display:none;'}

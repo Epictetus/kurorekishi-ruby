@@ -1,0 +1,47 @@
+
+%header
+  %h1{style:'margin-top: 15px;'}
+    黒歴史クリーナー
+  %p.lead
+    あなたの黒歴史を完全消去
+
+%section#help
+  .row-fluid
+    .span12
+      .well
+        %p
+          <span class='label label-important'> [ 重要 ] </span>
+        %p
+          このサービスを使うと、あなたのアカウントに登録されているツイートが全て削除されます。
+          一度削除されたツイートは復元することができません。
+        %p
+          <span class='label label-info'> [ 黒歴史クリーナーとは ] </span>
+        %p
+          %ul
+            %li
+              あなたの黒歴史ツイート全て削除します。
+            %li
+              Twitter APIの制限により最大で3200件までしか削除することができません。削除できない分はURLを直接指定することで表示可能ですが、リストからはアクセスすることができません。
+            %li
+              4分間に20件ずつ、1時間で300件のツイートが削除されます。
+            %li
+              削除開始までにツイートされたメッセージの中から新しいもの順で削除されます。削除開始後ツイートされたメッセージは削除対象になりません。
+            %li
+              有効期限は削除登録開始から12時間です。混雑状況によっては削除が終わる前に失効となる場合があります。その場合は失効期限を延長してください。
+            %li
+              失効した登録情報は直ちに削除されます。
+        %p
+          <span class='label label-info'> [ 免責事項 ] </span>
+        %p
+          %ul
+            %li
+              このサービスを利用することで生じた一切の損害について責任を負うことはできません。あらかじめご了承ください。
+        %p
+          <span class='label label-info'> [ 作者について ] </span>
+        %p
+          Twitter: <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a><br>
+          BLOG: <a href='http://blog.yabasoft.biz/' target='_blank'>cohakim's blog</a><br>
+          作ったアプリとか: <a href='http://cohakim.github.com/AboutMe/' target='_blank'>AboutMe</a><br>
+%footer.footer
+  %p
+    © 2012 <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a> All Rights Reserved.

@@ -10,13 +10,9 @@
     :javascript
       $(window).bind('load', function() { setTimeout(function() { window.scrollTo(0, 1) }, 1); });
   %body
-    %section
-      .ad
-        = render :partial => 'layouts/scripts/adsense_top'
+    = yield :ad_top
     .container-fluid
       = yield
-    %section
-      .ad
-        = render :partial => 'layouts/scripts/adsense_body'
+    = yield :ad_middle
     = yield :scripts
     = render :partial => 'layouts/scripts/analytics'
