@@ -5,7 +5,7 @@
 
   :javascript
     KC.request = {
-      destroy: function() {
+      clean: function() {
         $.ajax({
           url: '#{clean_path}', type: 'POST', dataType: 'text',
           statusCode: {
@@ -14,7 +14,23 @@
             },
             500: function() {
               if (confirm('削除リクエストに失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
-                location.href = '#{reset_session_path}';
+                location.href = '#{logout_path}';
+              }
+            },
+          }
+        });
+      },
+      abort: function() {
+        $.ajax({
+          url: '#{abort_path}', type: 'POST', dataType: 'text',
+          statusCode: {
+            200: function() {
+              alert('消去を中止しました。');
+              location.href = '#{logout_path}';
+            },
+            500: function() {
+              if (confirm('消去の中止に失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
+                location.href = '#{logout_path}';
               }
             },
           }
@@ -28,7 +44,7 @@
           },
           error: function() {
             if (confirm('ステータス情報を取得できませんでした。ログインしなおすとなおるかも？ログアウトしますか？')) {
-              location.href = '#{reset_session_path}';
+              location.href = '#{logout_path}';
             }
           }
         });
@@ -38,19 +54,19 @@
       status_timer: null,
       switch: function(context) {
         if (context == 'status') {
-          $('#request').hide();
-          $('#status').fadeIn();
+          $('#clean_box').hide();
+          $('#abort_box').hide();
+          $('#status_box').fadeIn();
         }
-        else if(context == 'request') {
-          $('#sign_name_t').val('');
-          KC.panel.drawNormal();
-          $('#status').hide();
-          $('#request').fadeIn();
+        else if(context == 'abort') {
+          $('#clean_box').hide();
+          $('#status_box').hide();
+          $('#abort_box').fadeIn();
         }
         KC.panel.toggleMonitor();
       },
       toggleMonitor: function() {
-        if ($('#status').is(':hidden')) {
+        if ($('#status_box').is(':hidden')) {
           clearInterval(KC.panel.status_timer);
           KC.panel.status_timer = null;
         }
@@ -64,46 +80,42 @@
       updateStatus: function(status) {
         $('#destroy_count').html(status['destroy_count']);
         $('#remaining_hits').html(status['remaining_hits']);
-        $('#rest').html(status['rest']);
+        $('#elapsed_time').html(status['elapsed_time']);
+        $('#progress > .bar').width((status['page'] / 160 * 100) + '%');
         if (status['destroy_count'] != 0) {
           $('#progress').removeClass('progress-danger');
-          $('#progress > .bar').width((status['page'] / 160 * 100) + '%');
         }
       },
-      drawNormal: function() {
-        $('#control_group_t').removeClass('success').removeClass('error');
-      },
-      drawSuccess: function() {
-        KC.panel.drawNormal();
-        $('#control_group_t').addClass('success');
-      },
-      drawError: function() {
-        KC.panel.drawNormal();
-        $('#control_group_t').addClass('error');
-      }
     };
   :javascript
-    $('#sign_name_t').bind('keyup', function() {
-      if ($('#sign_name_t').val() == '') {
-        KC.panel.drawNormal();
+    $('input').bind('keyup', function() {
+      if ($(this).val() == '') {
+        $(this).parent().parent().parent().removeClass('success').removeClass('error');
       }
-      else if ($('#sign_name_t').val() == '#{@user_profile[:twitter_screen_name]}') {
-        KC.panel.drawSuccess();
+      else if ($(this).val() == '#{@user_profile[:twitter_screen_name]}') {
+        $(this).parent().parent().parent().removeClass('success').removeClass('error');
+        $(this).parent().parent().parent().addClass('success');
       }
       else {
-        KC.panel.drawError();
+        $(this).parent().parent().parent().removeClass('success').removeClass('error');
+        $(this).parent().parent().parent().addClass('error');
       }
     });
-    $('#sign_name_t').bind('change', function() {
-      if ($('#sign_name_t').val() == '#{@user_profile[:twitter_screen_name]}') {
-        KC.request.destroy();
+    $('input').bind('change', function() {
+      if ($(this).val() == '#{@user_profile[:twitter_screen_name]}') {
+        if ($(this).attr('request_type') == 'clean') {
+          KC.request.clean();
+        }
+        else if ($(this).attr('request_type') == 'abort') {
+          KC.request.abort();
+        }
       }
     });
-    $('#renew').bind('click', function() {
-      KC.panel.switch('request');
-      $('#back').show();
+  :javascript
+    $('#abort').bind('click', function() {
+      KC.panel.switch('abort');
     });
-    $('#back').bind('click', function() {
+    $('#status').bind('click', function() {
       KC.panel.switch('status');
     });
     $(document).bind('ready', function() {

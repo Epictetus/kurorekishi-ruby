@@ -5,12 +5,10 @@ class RootsController < ApplicationController
 
   def show
     set_service_profile
-    if authorized? && queued?
+    if authorized?
       set_user_profile
-      @authorized = @queued = true
-    elsif authorized?
-      set_user_profile
-      @authorized = true; @queued = false
+      @authorized = true
+      @queued     = queued? ? true : false
     else
       set_twitter_authorize_url
       @authorized = @queued = false
@@ -28,7 +26,7 @@ class RootsController < ApplicationController
     end
   end
 
-  def destroy_session
+  def logout
     reset_session
     respond_to do |format|
       format.html { redirect_to root_path }
@@ -45,9 +43,25 @@ class RootsController < ApplicationController
       :serial => Twitter.user.id,
       :token  => Twitter.options[:oauth_token],
       :secret => Twitter.options[:oauth_token_secret],
-      :expired_at => DateTime.now.plus_with_duration(0.5),
     }
     job.save!
+
+    respond_to do |format|
+      format.json { render :nothing => true, :status => 200 }
+    end
+  rescue => ex
+    ExceptionNotifier::Notifier.exception_notification(request.env, ex).deliver
+
+    respond_to do |format|
+      format.json { render :nothing => true, :status => 500 }
+    end
+  end
+
+  def abort
+    set_user_profile
+
+    job = Bucket.find_by_serial(@user_profile[:twitter_id])
+    job.try(:destroy)
 
     respond_to do |format|
       format.json { render :nothing => true, :status => 200 }
@@ -67,7 +81,7 @@ class RootsController < ApplicationController
     stats = {
       :destroy_count  => job.destroy_count,
       :remaining_hits => twitter_from_session.rate_limit_status['remaining_hits'],
-      :rest           => job.rest,
+      :elapsed_time   => job.elapsed_time,
       :page           => job.page
     }
 

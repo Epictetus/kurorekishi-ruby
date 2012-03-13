@@ -9,22 +9,7 @@
 - else
   - r = 'normal'; s = 'none';
 
-%section#request{style:"display:#{r};"}
-  .row-fluid
-    .span12
-      .well
-        #control_group_t.control-group
-          .controls
-            .input-prepend
-              %span.add-on
-                ＠
-              %input#sign_name_t.span2{autocapitalize:'off',autofocus:true,style:'width:213px;'}
-            %p.help-inline
-              確認のためTwiter IDを入力してください
-        .help-link
-          = link_to '>> ステータス表示に戻る', 'javascript:void(0);', :id => 'back', :style => 'display:none;'
-
-%section#status{style:"display:#{s};"}
+%section#clean_box{style:"display:#{r};"}
   .row-fluid
     .span12
       .well
@@ -33,7 +18,21 @@
             .input-prepend
               %span.add-on
                 ＠
-              %input.span2{value:@user_profile[:twitter_screen_name],autocapitalize:'off',readonly:true,style:'width:213px;'}
+              %input.span2{autocapitalize:'off',style:'width:213px;',request_type:'clean'}
+            %p.help-inline
+              消去を行います<br>
+              確認のためTwiter IDを入力してください
+
+%section#status_box{style:"display:#{s};"}
+  .row-fluid
+    .span12
+      .well
+        .control-group
+          .controls
+            .input-prepend
+              %span.add-on
+                ＠
+              %input.span2{value:@user_profile[:twitter_screen_name],readonly:true,style:'width:213px;'}
           #progress.progress.progress-danger.progress-striped.active
             .bar
           .status{style:'text-align:center;'}
@@ -44,8 +43,23 @@
               = 'API残:'
               = content_tag :span, '---', :id => 'remaining_hits'
             %span.label.label-info<
-              = '失効:'
-              = content_tag :span, '---', :id => 'rest'
+              = '経過:'
+              = content_tag :span, '---', :id => 'elapsed_time'
         .help-link
-          = link_to '失効期限を延長する', 'javascript:void(0);', :id => 'renew'
+          = link_to '消去を中止する', 'javascript:void(0);', :id => 'abort'
 
+%section#abort_box{style:'display:none;'}
+  .row-fluid
+    .span12
+      .well
+        .control-group
+          .controls
+            .input-prepend
+              %span.add-on
+                ＠
+              %input.span2{autocapitalize:'off',style:'width:213px;',request_type:'abort'}
+            %p.help-inline
+              消去を中止します<br>
+              確認のためTwiter IDを入力してください
+        .help-link
+          = link_to '>> ステータス表示に戻る', 'javascript:void(0);', :id => 'status'

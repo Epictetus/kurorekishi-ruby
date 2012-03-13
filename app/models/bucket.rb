@@ -6,7 +6,6 @@
 #  serial            :string(255)     not null
 #  token             :string(255)     not null
 #  secret            :string(255)     not null
-#  expired_at        :datetime        not null
 #  page              :integer(4)      default(1)
 #  max_id            :string(255)
 #  destroy_count     :integer(4)      default(0)
@@ -24,7 +23,8 @@ class Bucket < ActiveRecord::Base
   scope :jobs, lambda {
     c1 = 'last_processed_at IS NULL'
     c2 = 'last_processed_at < DATE_ADD(NOW(), INTERVAL -4 MINUTE)'
-    where("#{c1} OR #{c2}").order('last_processed_at, id')
+    c3 = 'page <= 160'
+    where("(#{c1} OR #{c2}) AND #{c3}").order('last_processed_at, id')
   }
 
   ############################################################################
@@ -33,12 +33,8 @@ class Bucket < ActiveRecord::Base
     page > 160
   end
 
-  def expired?
-    DateTime.now >= expired_at
-  end
-
-  def rest
-    '@%sH' % ((expired_at.to_time - Time.now) / (60 * 60)).ceil
+  def elapsed_time
+    '%sH' % ((Time.now - created_at.to_time) / (60 * 60)).truncate
   end
 
   ############################################################################
