@@ -26,6 +26,7 @@ class Bucket < ActiveRecord::Base
     c3 = 'page <= 160'
     where("(#{c1} OR #{c2}) AND #{c3}").order('last_processed_at, id')
   }
+  scope :expired, where('created_at < DATE_ADD(NOW(), INTERVAL -2 DAY)')
 
   ############################################################################
 

@@ -3,13 +3,19 @@ class Clean
   @queue = :cleaner
 
   def self.perform
+    # 期限切れジョブの削除 -------------------------------------------------------------
+    Bucket.expired.each do |job|
+      job.destroy()
+    end
+
+    # ツイート削除処理 ---------------------------------------------------------------
     job = Bucket.jobs.first
     if job.blank? then return end
 
     # 最終処理日時を更新
     job.update_attribute(:last_processed_at, DateTime.now)
 
-    # 削除処理開始 -------------------------------------------------------------
+    # twitter client取得
     twitter = twitter_client(job.token, job.secret)
 
     # API残確認
