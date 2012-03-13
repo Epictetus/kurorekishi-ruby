@@ -46,7 +46,7 @@
               = '経過:'
               = content_tag :span, '---', :id => 'elapsed_time'
         .help-link
-          = link_to '消去を中止する', 'javascript:void(0);', :id => 'abort'
+          = link_to '削除処理を完了する', 'javascript:void(0);', :id => 'abort'
 
 %section#abort_box{style:'display:none;'}
   .row-fluid
@@ -59,7 +59,7 @@
                 ＠
               %input.span2{autocapitalize:'off',style:'width:213px;',request_type:'abort'}
             %p.help-inline
-              消去を中止します<br>
+              削除処理を完了します<br>
               確認のためTwiter IDを入力してください
         .help-link
           = link_to '>> ステータス表示に戻る', 'javascript:void(0);', :id => 'status'
