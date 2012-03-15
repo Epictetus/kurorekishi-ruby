@@ -20,7 +20,10 @@ class RootsController < ApplicationController
   end
 
   def oauth_callback
-    set_twitter_access_token
+    if authentication_accepted?
+      set_twitter_access_token
+    end
+
     respond_to do |format|
       format.html { redirect_to root_path }
     end
@@ -106,6 +109,10 @@ class RootsController < ApplicationController
   def queued?
     session[:user_profile].present? && \
       Bucket.find_by_serial(session[:user_profile][:twitter_id]).present?
+  end
+
+  def authentication_accepted?
+    (params[:oauth_token].present? && params[:oauth_verifier].present?)
   end
 
   ############################################################################
