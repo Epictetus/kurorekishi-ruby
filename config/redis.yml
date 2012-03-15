@@ -1,4 +1,4 @@
 
 development: 127.0.0.1:6379
 test:        127.0.0.1:6379
-production:  127.0.0.1:6379
+production:  db:6379

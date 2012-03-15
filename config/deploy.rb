@@ -1,7 +1,8 @@
 set  :application, 'kurorekishi'
-role :web, 'kurorekishi'
-role :app, 'kurorekishi'
-role :db,  'kurorekishi', :primary => true
+role :web,   'web'
+role :app,   'app'
+role :db,    'app', :primary => true
+role :batch, 'kurorekishi'
 
 set :scm,         :git
 set :user,        'app'
@@ -22,7 +23,7 @@ set :bundle_dir,      File.join(fetch(:shared_path), 'bundle')
 set :bundle_flags,    '--quiet'
 set :bundle_without,  [:development, :test]
 set :bundle_cmd,      'bundle'
-set :bundle_roles,    [:app]
+set :bundle_roles,    [:web]
 
 # for unicorn
 set :rails_env, :production
@@ -30,30 +31,42 @@ set :unicorn_binary, 'bundle exec unicorn_rails'
 set :unicorn_config, "#{current_path}/config/unicorn.rb"
 set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 
-namespace :app do
-  task :start, :roles => :app, :except => { :no_release => true } do
+namespace :web do
+  task :start, :roles => :web, :except => { :no_release => true } do
     run "cd #{current_path} && #{try_sudo} #{unicorn_binary} -c #{unicorn_config} -E #{rails_env} -D"
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_cleaner start"
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_scheduler start"
   end
-  task :stop, :roles => :app, :except => { :no_release => true } do
+  task :stop, :roles => :web, :except => { :no_release => true } do
     run "#{try_sudo} kill `cat #{unicorn_pid}`"
-    run "cd #{current_path} && script/resque_scheduler stop"
-    run "cd #{current_path} && script/resque_cleaner stop"
   end
-  task :reload, :roles => :app, :except => { :no_release => true } do
+  task :reload, :roles => :web, :except => { :no_release => true } do
     run "#{try_sudo} kill -s USR2 `cat #{unicorn_pid}`"
   end
-  task :restart, :roles => :app, :except => { :no_release => true } do
+  task :restart, :roles => :web, :except => { :no_release => true } do
     stop
     start
   end
-  task :precompile, :roles => :app, :except => { :no_release => true } do
+  task :precompile, :roles => :web, :except => { :no_release => true } do
     run "cd #{current_path} && bundle exec rake assets:precompile"
   end
 end
 
-after 'deploy:symlink' do
+# for kurorekishi batches
+namespace :batch do
+  task :start, :roles => :batch do
+    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_cleaner start"
+    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_scheduler start"
+  end
+  task :stop, :roles => :batch do
+    run "cd #{current_path} && script/resque_scheduler stop"
+    run "cd #{current_path} && script/resque_cleaner stop"
+  end
+  task :restart, :roles => :batch do
+    stop
+    start
+  end
+end
+
+after 'deploy:create_symlink' do
   # unicorn
   run "mkdir -p #{shared_path}/sockets"
   run "ln -s #{shared_path}/sockets #{release_path}/tmp/sockets"
