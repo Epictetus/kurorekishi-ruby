@@ -6,8 +6,11 @@
   .row-fluid
     .span12
       .well
+        %ul{style:'font-size:11px;'}
+          %li 簡単操作であなたのツイートを全消去！
+          %li 1時間に300件ずつ消去します！
+          %li いつでもキャンセル可能です！
+          %li 削除中でも新着のツイートは消えません！
+        %p.help-link{style:'margin-top:0px;margin-bottom:15px;font-size:11px;'}
+          = link_to 'もっと詳しくみる', help_path, :target => '_blank', :class => 'help-link'
         = link_to 'Twitterの黒歴史を抹消する', @authorize_url, :class => 'btn btn-primary'
-        <br><br>
-        = link_to 'Mixiの黒歴史を抹消する', 'javascript:void(0);', :class => 'btn disabled'
-        <br><br>
-        = link_to 'Facebookの黒歴史を抹消する', 'javascript:void(0);', :class => 'btn disabled'

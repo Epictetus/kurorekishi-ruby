@@ -7,7 +7,6 @@
     黒歴史クリーナー
   %p.lead
     あなたの黒歴史を完全消去
-    = link_to '', help_path, :class => 'icon-info-sign icon-white', :target => '_blank'
     #count.label.label-success
       = "（計#{@service_profile[:users_count]}人#{@service_profile[:destroy_count]}件の黒歴史を消去）"
 - if !@queued && !@authorized

@@ -1,4 +1,7 @@
 
+# app
+Rails.application.routes.default_url_options[:host]= 'kurorekishi.yabasoft.biz'
+
 # twitter
 configatron.twitter.customer_key   = 'EfyBrxvjIq4HptaLhkPPg'
 configatron.twitter.password       = '<your customer secret>'

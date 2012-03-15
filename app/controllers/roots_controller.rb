@@ -25,14 +25,14 @@ class RootsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to root_path }
+      format.html { redirect_to root_url }
     end
   end
 
   def logout
     reset_session
     respond_to do |format|
-      format.html { redirect_to root_path }
+      format.html { redirect_to root_url }
     end
   end
 
