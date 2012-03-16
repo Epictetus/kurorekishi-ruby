@@ -25,12 +25,7 @@ set :bundle_without,  [:development, :test]
 set :bundle_cmd,      'bundle'
 set :bundle_roles,    [:web]
 
-# for unicorn
-set :rails_env, :production
-set :unicorn_binary, 'bundle exec unicorn_rails'
-set :unicorn_config, "#{current_path}/config/unicorn.rb"
-set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
-
+# for container
 namespace :web do
   task :restart, :roles => :web, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
@@ -43,12 +38,14 @@ end
 # for kurorekishi batches
 namespace :batch do
   task :start, :roles => :batch do
+    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_tweet_bot start"
     run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_cleaner start"
     run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_scheduler start"
   end
   task :stop, :roles => :batch do
     run "cd #{current_path} && script/resque_scheduler stop"
     run "cd #{current_path} && script/resque_cleaner stop"
+    run "cd #{current_path} && script/resque_tweet_bot stop"
   end
   task :restart, :roles => :batch do
     stop
@@ -57,9 +54,6 @@ namespace :batch do
 end
 
 after 'deploy:create_symlink' do
-  # unicorn
-  run "mkdir -p #{shared_path}/sockets"
-  run "ln -s #{shared_path}/sockets #{release_path}/tmp/sockets"
   # assets
   run "mkdir -p #{shared_path}/assets"
   run "ln -s #{shared_path}/assets #{release_path}/public/assets"
