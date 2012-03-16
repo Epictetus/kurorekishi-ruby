@@ -3,3 +3,8 @@ clean:
   class: 'Clean'
   queue: 'cleaner'
   description: 'Clean Job'
+mention:
+  every: '5m'
+  class: 'Mention'
+  queue: 'tweet_bot'
+  description: 'Mention Job'

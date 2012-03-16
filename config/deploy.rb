@@ -32,18 +32,8 @@ set :unicorn_config, "#{current_path}/config/unicorn.rb"
 set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
 
 namespace :web do
-  task :start, :roles => :web, :except => { :no_release => true } do
-    run "cd #{current_path} && #{try_sudo} #{unicorn_binary} -c #{unicorn_config} -E #{rails_env} -D"
-  end
-  task :stop, :roles => :web, :except => { :no_release => true } do
-    run "#{try_sudo} kill `cat #{unicorn_pid}`"
-  end
-  task :reload, :roles => :web, :except => { :no_release => true } do
-    run "#{try_sudo} kill -s USR2 `cat #{unicorn_pid}`"
-  end
   task :restart, :roles => :web, :except => { :no_release => true } do
-    stop
-    start
+    run "touch #{current_path}/tmp/restart.txt"
   end
   task :precompile, :roles => :web, :except => { :no_release => true } do
     run "cd #{current_path} && bundle exec rake assets:precompile"

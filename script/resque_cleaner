@@ -3,9 +3,9 @@
 ENV['RAILS_ENV'] ||= 'development'
 require ::File.expand_path('../../config/environment',  __FILE__)
 
-class CleanerDaemon < DaemonSpawn::Base
+class TweetBotDaemon < DaemonSpawn::Base
   def start(args)
-    @worker = Resque::Worker.new("cleaner")
+    @worker = Resque::Worker.new("tweet_bot")
     @worker.verbose = true
     @worker.work(1)
   end
@@ -15,10 +15,10 @@ class CleanerDaemon < DaemonSpawn::Base
   end
 end
 
-CleanerDaemon.spawn!({
-  :processes => 2,
-  :log_file => File.join(Rails.root, "log", "cleaner.log"),
-  :pid_file => File.join(Rails.root, 'tmp', 'pids', 'cleaner.pid'),
+TweetBotDaemon.spawn!({
+  :processes => 1,
+  :log_file => File.join(Rails.root, "log", "tweet_bot.log"),
+  :pid_file => File.join(Rails.root, 'tmp', 'pids', 'tweet_bot.pid'),
   :sync_log => true,
   :working_dir => Rails.root,
   :singleton => true
