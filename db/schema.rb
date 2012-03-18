@@ -17,7 +17,6 @@ ActiveRecord::Schema.define(:version => 20120316140030) do
     t.string   "serial",                           :null => false
     t.string   "token",                            :null => false
     t.string   "secret",                           :null => false
-    t.datetime "expired_at",                       :null => false
     t.integer  "page",              :default => 1
     t.string   "max_id"
     t.integer  "destroy_count",     :default => 0
@@ -26,7 +25,7 @@ ActiveRecord::Schema.define(:version => 20120316140030) do
     t.datetime "updated_at",                       :null => false
   end
 
-  add_index "buckets", ["serial"], :name => "index_buckets_on_serial"
+  add_index "buckets", ["serial"], :name => "index_buckets_on_serial", :unique => true
 
   create_table "prtools", :force => true do |t|
     t.string   "context",                        :null => false

@@ -5,7 +5,7 @@ class Clean
   def self.perform
     # 期限切れジョブの削除 -------------------------------------------------------------
     Bucket.expired.each do |job|
-      job.destroy()
+      job.destroy
     end
 
     # ツイート削除処理 ---------------------------------------------------------------
@@ -13,7 +13,7 @@ class Clean
     if job.blank? then return end
 
     # 最終処理日時を更新
-    job.update_attribute(:last_processed_at, DateTime.now)
+    job.update_attributes!({ :last_processed_at => DateTime.now })
 
     # twitter client取得
     twitter = twitter_client(job.token, job.secret)
@@ -32,8 +32,7 @@ class Clean
 
     # max_idの保存
     if job.max_id.blank? && timeline.present?
-      job.update_attribute(:max_id, timeline.first.id)
-      page = 1
+      job.update_attributes!({ :max_id => timeline.first.id, :page => 1 })
     end
 
     begin

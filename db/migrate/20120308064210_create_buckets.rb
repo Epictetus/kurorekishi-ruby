@@ -11,6 +11,6 @@ class CreateBuckets < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :buckets, :serial
+    add_index :buckets, :serial, :unique => true
   end
 end
