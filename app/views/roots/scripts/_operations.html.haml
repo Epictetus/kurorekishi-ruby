@@ -106,7 +106,7 @@
         $(this).parent().parent().parent().addClass('error');
       }
     });
-    $('input').bind('change', function() {
+    $('input').bind('submit', function() {
       if ($(this).val() == '#{@user_profile[:twitter_screen_name]}') {
         if ($(this).attr('request_type') == 'clean') {
           KC.request.clean();
