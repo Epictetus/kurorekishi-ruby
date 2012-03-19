@@ -25,11 +25,11 @@
           url: '#{abort_path}', type: 'POST', dataType: 'text',
           statusCode: {
             200: function() {
-              alert('消去を中止しました。');
+              alert('削除処理を完了しました。');
               location.href = '#{logout_path}';
             },
             500: function() {
-              if (confirm('消去の中止に失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
+              if (confirm('削除処理の完了に失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
                 location.href = '#{logout_path}';
               }
             },
