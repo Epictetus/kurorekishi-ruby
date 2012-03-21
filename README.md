@@ -1,5 +1,5 @@
-黒歴史クリーナー
-========
+黒歴史クリーナー[![Build Status](https://secure.travis-ci.org/cohakim/kurorekishi-ruby.png)](http://travis-ci.org/cohakim/fanarts-ruby)
+==============
 
 黒歴史クリーナーはツイート一括削除するためのサービスです。
 簡単な操作でアカウントに登録されているツイートを一括で削除できます。
