@@ -27,7 +27,7 @@ class Clean
       timeline = twitter.user_timeline(job.serial.to_i, {
         :page        => job.page,
         :count       => 20,
-        :include_rts => true,
+        #:include_rts => true,
         :trim_user   => true,
       })
     else
@@ -35,7 +35,7 @@ class Clean
         :page        => job.page,
         :max_id      => job.max_id.try(:to_i),
         :count       => 20,
-        :include_rts => true,
+        #:include_rts => true,
         :trim_user   => true,
       })
     end

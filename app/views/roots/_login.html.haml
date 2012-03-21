@@ -6,6 +6,9 @@
   .row-fluid
     .span12
       .well
+        %div.label.label-warning{style:'text-align:center;'}
+          [NEW] RTの削除に対応します！(3/22より)
+        <br>
         %ul{style:'font-size:11px;'}
           %li 簡単操作であなたのツイートを全消去！
           %li 1時間に300件ずつ消去します！
@@ -14,3 +17,4 @@
         %p.help-link{style:'margin-top:0px;margin-bottom:15px;font-size:11px;'}
           = link_to 'もっと詳しくみる', help_path, :target => '_blank', :class => 'help-link'
         = link_to 'Twitterの黒歴史を抹消する', @authorize_url, :class => 'btn btn-primary'
+        %ul{style:'font-size:11px;'}
