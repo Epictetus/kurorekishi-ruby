@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.2'
+gem 'mysql2'
 gem 'resque', :git => 'git://github.com/defunkt/resque.git'
 gem 'resque-scheduler', :require => 'resque_scheduler'
 gem 'daemon-spawn', :require => 'daemon_spawn'
@@ -28,10 +29,14 @@ group :development do
 end
 
 group :development, :test do
-  gem 'sqlite3'
-end
-
-group :production do
-  gem 'unicorn'
-  gem 'mysql2'
+  gem 'rspec-rails'
+  gem 'spork'
+  gem 'guard-spork'
+  gem 'guard-rspec'
+  gem 'rb-fsevent'
+  gem 'factory_girl_rails'
+  gem 'simplecov', :require => false
+  gem 'ci_reporter', :require => 'ci/reporter/rake/rspec'
+  gem 'growl'
+  gem 'turn', '~> 0.8.3', :require => false
 end
