@@ -23,12 +23,20 @@ class Clean
     if rest <= 20 then return end
 
     # 処理対象のタイムライン取得
-    timeline = twitter.user_timeline(job.serial.to_i, {
-      :page      => job.page,
-      :max_id    => job.max_id.try(:to_i),
-      :count     => 20,
-      :trim_user => true,
-    })
+    if twitter.user.protected?
+      timeline = twitter.user_timeline(job.serial.to_i, {
+        :page      => job.page,
+        :count     => 20,
+        :trim_user => true,
+      })
+    else
+      timeline = twitter.user_timeline(job.serial.to_i, {
+        :page      => job.page,
+        :max_id    => job.max_id.try(:to_i),
+        :count     => 20,
+        :trim_user => true,
+      })
+    end
 
     # max_idの保存
     if job.max_id.blank? && timeline.present?
