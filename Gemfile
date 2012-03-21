@@ -36,7 +36,7 @@ group :development, :test do
   gem 'rb-fsevent'
   gem 'factory_girl_rails'
   gem 'simplecov', :require => false
-  gem 'ci_reporter', :require => 'ci/reporter/rake/rspec'
+  #gem 'ci_reporter', :require => 'ci/reporter/rake/rspec'
   gem 'growl'
   gem 'turn', '~> 0.8.3', :require => false
 end

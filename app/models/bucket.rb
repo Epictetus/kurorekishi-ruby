@@ -6,7 +6,6 @@
 #  serial            :string(255)     not null
 #  token             :string(255)     not null
 #  secret            :string(255)     not null
-#  expired_at        :datetime        not null
 #  page              :integer(4)      default(1)
 #  max_id            :string(255)
 #  destroy_count     :integer(4)      default(0)
@@ -16,7 +15,7 @@
 #
 # Indexes
 #
-#  index_buckets_on_serial  (serial)
+#  index_buckets_on_serial  (serial) UNIQUE
 #
 
 class Bucket < ActiveRecord::Base
