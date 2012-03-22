@@ -9,30 +9,48 @@ class Mention
     nil
   end
 
-  protected
-
   def self.search_and_destroy(conditions)
-    twitter = twitter_client
-    prtool  = Prtool.find_or_create_by_context(:mention_destroy)
+    prtool = Prtool.find_or_create_by_context(:mention_destroy)
+    prtool.users ||= Hash.new
     begin
       tweets = Hash.new
-      prtool.users ||= Hash.new
+      twitter = twitter_client
       twitter.search(conditions).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
         twitter.update(
-          "@#{tweet.from_user} ツイート一括削除ツール「黒歴史クリーナー」よかったら使ってください (>ω<) - http://kurorekishi.yabasoft.biz/ （このメッセージは自動投稿です。1ユーザにつき1度だけ投稿されます。）",
+          "#{tweet.from_user} #{chuni_reply}",
           { :in_reply_to_status_id => tweet.id, :trim_user => true }
         )
-        tweets.store(tweet.from_user_id, tweet.id)
+        tweets[tweet.from_user_id] = tweet.id
       end
     ensure
-      prtool.attributes = {
+      prtool.update_attributes!({
         :context => :mention_destroy,
         :users   => prtool.users.merge(tweets)
-      }
-      prtool.save!
+      })
+      if !tweets.empty?
+        twitter.update('黒歴史クリーナーのアドレスはこちらです(´・ω・`) - http://kurorekishi.yabasoft.biz/')
+      else
+        twitter.update(chuni_tweet) if rand(3) == 0
+      end
     end
     nil
+  end
+
+  def self.chuni_reply
+    replies = lambda {
+      lines = open("#{Rails.root}/db/chuni_t.txt").read
+      lines.chomp.split("\n")
+    }.call
+    replies[rand(replies.length)]
+  end
+
+  def self.chuni_tweet
+    tweets = lambda {
+      lines = open("#{Rails.root}/db/chuni.txt").read
+      lines.chomp.split("\n")
+    }.call
+    tweets[rand(tweets.length)]
   end
 
   def self.twitter_client
