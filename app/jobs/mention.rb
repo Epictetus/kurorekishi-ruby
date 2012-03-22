@@ -28,11 +28,7 @@ class Mention
         :context => :mention_destroy,
         :users   => prtool.users.merge(tweets)
       })
-      if !tweets.empty?
-        twitter.update('【アドレスはこちら】 黒歴史クリーナーのアドレスはこちらです(´・ω・`) - http://kurorekishi.yabasoft.biz/')
-      else
-        twitter.update(chuni_tweet) if rand(3) == 0
-      end
+      twitter.update(chuni_tweet) if rand(8) == 0
     end
     nil
   end
