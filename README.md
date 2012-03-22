@@ -1,10 +1,12 @@
-黒歴史クリーナー[![Build Status](https://secure.travis-ci.org/cohakim/kurorekishi-ruby.png)](http://travis-ci.org/cohakim/fanarts-ruby)
+黒歴史クリーナー[![Build Status](https://secure.travis-ci.org/cohakim/kurorekishi-ruby.png)](http://travis-ci.org/cohakim/kurorekishi-ruby)
 ==============
 
 黒歴史クリーナーはツイート一括削除するためのサービスです。
 簡単な操作でアカウントに登録されているツイートを一括で削除できます。
 
-<img alt="" src="http://dl.dropbox.com/u/157743/blog/pages/kurorekishi/ss01.png" title="kurorekishi01" class="alignnone" width="180" height="270" /> <img alt="" src="http://dl.dropbox.com/u/157743/blog/pages/kurorekishi/ss02.png" title="kurorekishi02" class="alignnone" width="180" height="270" /> <img alt="" src="http://dl.dropbox.com/u/157743/blog/pages/kurorekishi/ss03.png" title="kurorekishi03" class="alignnone" width="180" height="270" />
+<img alt="" src="http://dl.dropbox.com/u/157743/blog/pages/kurorekishi/ss01.png" title="kurorekishi01" class="alignnone" width="180" height="270" />
+<img alt="" src="http://dl.dropbox.com/u/157743/blog/pages/kurorekishi/ss02.png" title="kurorekishi02" class="alignnone" width="180" height="270" />
+<img alt="" src="http://dl.dropbox.com/u/157743/blog/pages/kurorekishi/ss03.png" title="kurorekishi03" class="alignnone" width="180" height="270" />
 
 ## Features
 
