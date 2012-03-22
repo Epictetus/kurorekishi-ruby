@@ -7,9 +7,8 @@
     .span12
       .well
         %div.label.label-warning{style:'text-align:center;'}
-          [NEW] RTの削除に対応します！(3/22より)
-        <br>
-        %ul{style:'font-size:11px;'}
+          [NEW] RTの削除に対応しました！(3/22より)
+        %ul{style:'margin-top:10px;font-size:11px;'}
           %li 簡単操作であなたのツイートを全消去！
           %li 1時間に300件ずつ消去します！
           %li いつでもキャンセル可能です！
@@ -17,4 +16,15 @@
         %p.help-link{style:'margin-top:0px;margin-bottom:15px;font-size:11px;'}
           = link_to 'もっと詳しくみる', help_path, :target => '_blank', :class => 'help-link'
         = link_to 'Twitterの黒歴史を抹消する', @authorize_url, :class => 'btn btn-primary'
-        %ul{style:'font-size:11px;'}
+
+%section
+  .row-fluid
+    .span12
+      .well
+        %div.label.label-warning{style:'text-align:center;'}
+          紹介記事を書いてくれた方々！
+        %p{style:'margin-top:10px;font-size:11px;'}
+          → <a href='http://okinokio.blog.fc2.com/blog-entry-2.html' target='_blank'>Twitterのツイートを全件削除する方法</a><br>
+          俺はブログが書けない 様に紹介記事を書いていただきました！ありがとうございます(>ω<)<br>
+        %p.help-link{style:'margin-top:0px;font-size:11px;'}
+          = link_to 'もっと詳しくみる', media_path, :target => '_blank', :class => 'help-link'
