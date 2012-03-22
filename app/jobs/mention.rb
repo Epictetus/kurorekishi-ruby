@@ -18,7 +18,7 @@ class Mention
       twitter.search(conditions).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
         twitter.update(
-          "#{tweet.from_user} #{chuni_reply}",
+          "@#{tweet.from_user} #{chuni_reply}",
           { :in_reply_to_status_id => tweet.id, :trim_user => true }
         )
         tweets[tweet.from_user_id] = tweet.id
