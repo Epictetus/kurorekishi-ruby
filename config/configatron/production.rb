@@ -7,5 +7,5 @@ configatron.twitter.oauth_callback  = { :oauth_callback => 'http://kurorekishi.y
 # PRTools
 configatron.prtools.twitter.customer_key    = '4upSvEDhihcbIB9VdXBIQ'
 configatron.prtools.twitter.consumer_secret = '<your customer secret>'
-configatron.prtools.twitter.access_token        = '307001126-LmgsoMmW0boOIfeXu2Dq1gUdh02P4QSWiMw0sdRz'
+configatron.prtools.twitter.access_token        = '532760026-s9s7FCweP5fNqX7HbH8o3ZFa20pp8cysffstcJ6H'
 configatron.prtools.twitter.access_token_secret = '<your accesstoken secret>'
