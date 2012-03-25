@@ -184,7 +184,7 @@ class RootsController < ApplicationController
 
   def consumer_from_configatron
     OAuth::Consumer.new(
-      configatron.twitter.customer_key,
+      configatron.twitter.consumer_key,
       configatron.twitter.consumer_secret,
       :site => "http://twitter.com",
     )

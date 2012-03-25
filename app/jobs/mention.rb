@@ -51,7 +51,7 @@ class Mention
 
   def self.twitter_client
     Twitter.configure do |config|
-      config.consumer_key       = configatron.prtools.twitter.customer_key
+      config.consumer_key       = configatron.prtools.twitter.consumer_key
       config.consumer_secret    = configatron.prtools.twitter.consumer_secret
       config.oauth_token        = configatron.prtools.twitter.access_token
       config.oauth_token_secret = configatron.prtools.twitter.access_token_secret

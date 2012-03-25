@@ -68,7 +68,7 @@ class Clean
 
   def self.twitter_client(access_token, access_secret)
     Twitter.configure do |config|
-      config.consumer_key       = configatron.twitter.customer_key
+      config.consumer_key       = configatron.twitter.consumer_key
       config.consumer_secret    = configatron.twitter.consumer_secret
       config.oauth_token        = access_token
       config.oauth_token_secret = access_secret
