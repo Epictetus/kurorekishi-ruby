@@ -4,6 +4,7 @@ class Mention
   @queue = :tweet_bot
 
   def self.perform
+    search_and_destroy('twitwipe')
     search_and_destroy('ツイート 全消し OR 全削除')
     search_and_destroy('ツイート 全部 OR 全て 消したい OR 削除 OR 消す')
     nil
