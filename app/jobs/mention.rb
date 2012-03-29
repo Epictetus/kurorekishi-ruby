@@ -16,7 +16,7 @@ class Mention
     prtool.users ||= Hash.new
     begin
       tweets = Hash.new
-      Twitter.search(conditions).each do |tweet|
+      Twitter.search(conditions, { :lang => 'ja' }).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
         Twitter.update(
           "@#{tweet.from_user} #{chuni_reply}",
