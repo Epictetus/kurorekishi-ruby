@@ -4,7 +4,7 @@ class Mention
   @queue = :tweet_bot
 
   def self.perform
-    search_and_destroy('twitwipe')
+    search_and_destroy('twitwipe 、 OR 。')
     search_and_destroy('ツイート 全消し OR 全削除')
     search_and_destroy('ツイート 全部 OR 全て 消したい OR 削除 OR 消す')
     nil
@@ -16,7 +16,7 @@ class Mention
     prtool.users ||= Hash.new
     begin
       tweets = Hash.new
-      Twitter.search(conditions, { :lang => 'ja' }).each do |tweet|
+      Twitter.search(conditions).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
         Twitter.update(
           "@#{tweet.from_user} #{chuni_reply}",
