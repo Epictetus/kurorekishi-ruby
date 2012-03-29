@@ -11,14 +11,14 @@ class Mention
   end
 
   def self.search_and_destroy(conditions)
+    set_twitter_client
     prtool = Prtool.find_or_create_by_context(:mention_destroy)
     prtool.users ||= Hash.new
     begin
       tweets = Hash.new
-      twitter = twitter_client
-      twitter.search(conditions).each do |tweet|
+      Twitter.search(conditions).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
-        twitter.update(
+        Twitter.update(
           "@#{tweet.from_user} #{chuni_reply}",
           { :in_reply_to_status_id => tweet.id, :trim_user => true }
         )
@@ -29,7 +29,7 @@ class Mention
         :context => :mention_destroy,
         :users   => prtool.users.merge(tweets)
       })
-      twitter.update(chuni_tweet) if rand(8) == 0
+      Twitter.update(chuni_tweet) if rand(8) == 0
     end
     nil
   end
@@ -50,14 +50,13 @@ class Mention
     tweets[rand(tweets.length)]
   end
 
-  def self.twitter_client
+  def self.set_twitter_client
     Twitter.configure do |config|
       config.consumer_key       = configatron.prtools.twitter.consumer_key
       config.consumer_secret    = configatron.prtools.twitter.consumer_secret
       config.oauth_token        = configatron.prtools.twitter.access_token
       config.oauth_token_secret = configatron.prtools.twitter.access_token_secret
     end
-    Twitter.new
   end
 
 end

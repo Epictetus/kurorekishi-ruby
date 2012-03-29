@@ -15,23 +15,23 @@ class Clean
     # 最終処理日時を更新
     job.update_attributes!({ :last_processed_at => DateTime.now })
 
-    # twitter client取得
-    twitter = twitter_client(job.token, job.secret)
+    # twitter client設定
+    set_twitter_client(job.token, job.secret)
 
     # API残確認
-    rest = twitter.rate_limit_status['remaining_hits']
+    rest = Twitter.rate_limit_status['remaining_hits']
     if rest <= 20 then return end
 
     # 処理対象のタイムライン取得
-    if twitter.user.protected?
-      timeline = twitter.user_timeline(job.serial.to_i, {
+    if Twitter.user.protected?
+      timeline = Twitter.user_timeline(job.serial.to_i, {
         :page        => job.page,
         :count       => 20,
         :include_rts => true,
         :trim_user   => true,
       })
     else
-      timeline = twitter.user_timeline(job.serial.to_i, {
+      timeline = Twitter.user_timeline(job.serial.to_i, {
         :page        => job.page,
         :max_id      => job.max_id.try(:to_i),
         :count       => 20,
@@ -49,7 +49,7 @@ class Clean
       # ツイート削除
       count = 0
       timeline.each do |status|
-        twitter.status_destroy(status.id, { :trim_user => true })
+        Twitter.status_destroy(status.id, { :trim_user => true })
         count += 1
         sleep(0.5)
       end
@@ -66,14 +66,13 @@ class Clean
   ############################################################################
   protected
 
-  def self.twitter_client(access_token, access_secret)
+  def self.set_twitter_client(access_token, access_secret)
     Twitter.configure do |config|
       config.consumer_key       = configatron.twitter.consumer_key
       config.consumer_secret    = configatron.twitter.consumer_secret
       config.oauth_token        = access_token
       config.oauth_token_secret = access_secret
     end
-    Twitter.new
   end
 
 end
