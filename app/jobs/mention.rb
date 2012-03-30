@@ -4,19 +4,19 @@ class Mention
   @queue = :tweet_bot
 
   def self.perform
-    search_and_destroy('twitwipe 、 OR 。')
+    search_and_destroy('twitwipe', { :lang => 'ja' })
     search_and_destroy('ツイート 全消し OR 全削除')
     search_and_destroy('ツイート 全部 OR 全て 消したい OR 削除 OR 消す')
     nil
   end
 
-  def self.search_and_destroy(conditions)
+  def self.search_and_destroy(conditions, opts = {})
     set_twitter_client
     prtool = Prtool.find_or_create_by_context(:mention_destroy)
     prtool.users ||= Hash.new
     begin
       tweets = Hash.new
-      Twitter.search(conditions).each do |tweet|
+      Twitter.search(conditions, opts).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
         Twitter.update(
           "@#{tweet.from_user} #{chuni_reply}",
