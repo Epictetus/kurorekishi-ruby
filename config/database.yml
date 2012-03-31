@@ -22,4 +22,5 @@ production:
   username: kurorekishi
   password: kurorekishi
   encoding: utf8
+  reconnect: true
   host: db

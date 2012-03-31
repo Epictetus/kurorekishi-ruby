@@ -12,6 +12,9 @@
   %body
     = yield :ad_top
     .container-fluid
+      - if flash.present?
+        .alert.alert-error
+          != flash[:notice]
       = yield
     = yield :ad_middle
     = yield :scripts

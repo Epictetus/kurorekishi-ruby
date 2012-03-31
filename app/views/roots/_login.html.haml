@@ -10,6 +10,7 @@
           [NEW] RTの削除に対応しました！(3/22より)
         %ul{style:'margin-top:10px;font-size:11px;'}
           %li 簡単操作であなたのツイートを全消去！
+          %li ブラウザを閉じていても削除されます！
           %li 1時間に300件ずつ消去します！
           %li いつでもキャンセル可能です！
           %li 削除中でも新着のツイートは消えません！
@@ -21,10 +22,25 @@
   .row-fluid
     .span12
       .well
+        %div.label.label-important{style:'text-align:center;'}
+          [お知らせ] 負荷の高い状態が続いています
+        %p{style:'margin-top:10px;font-size:11px;'}
+          → 2012/04/01<br>
+          現在想定よりも多くのアクセスをいただいており、システムが不安定になっている場合がございます。
+          削除登録できない場合は、<a href='https://twitter.com/#!/cohakims_work'>@cohakim</a> までご一報いただけると大変助かります。
+
+
+%section
+  .row-fluid
+    .span12
+      .well
         %div.label.label-warning{style:'text-align:center;'}
-          紹介記事を書いてくれた方々！
+          紹介記事を書いていただきました！
+        %p{style:'margin-top:10px;font-size:11px;'}
+          → <a href='http://www.lifehacker.jp/2012/03/120330kurokekishi.html' target='_blank'>新社会人＆転職者必見！　過去のtweetを抹消できる「黒歴史クリーナー」</a><br>
+          「ライフハッカー」様に取り上げていただきました！ありがとうございます(>ω<)<br>
         %p{style:'margin-top:10px;font-size:11px;'}
           → <a href='http://okinokio.blog.fc2.com/blog-entry-2.html' target='_blank'>Twitterのツイートを全件削除する方法</a><br>
-          俺はブログが書けない 様に紹介記事を書いていただきました！ありがとうございます(>ω<)<br>
+          「俺はブログが書けない」様に紹介記事を書いていただきました！ありがとうございます(>ω<)<br>
         %p.help-link{style:'margin-top:0px;font-size:11px;'}
           = link_to 'もっと詳しくみる', media_path, :target => '_blank', :class => 'help-link'

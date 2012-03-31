@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 
 class RootsController < ApplicationController
 
@@ -27,10 +28,30 @@ class RootsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to root_url }
     end
+
+  rescue => ex
+    ExceptionNotifier::Notifier.exception_notification(request.env, ex).deliver
+    flash[:notice] = 'Twitter認証に失敗しました。（◞‸◟）'
+
+    respond_to do |format|
+      format.html { redirect_to root_url }
+    end
+
   end
 
   def logout
     reset_session
+    respond_to do |format|
+      format.html { redirect_to root_url }
+    end
+  end
+
+  def notification
+    raise 'メール送信テストです'
+  rescue => ex
+    ExceptionNotifier::Notifier.exception_notification(request.env, ex).deliver
+    flash[:notice] = 'メール送信テストです'
+
     respond_to do |format|
       format.html { redirect_to root_url }
     end
