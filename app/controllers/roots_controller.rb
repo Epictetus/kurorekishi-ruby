@@ -65,14 +65,14 @@ class RootsController < ApplicationController
     job = Bucket.find_by_serial(@user_profile[:twitter_id])
     if job.present?
       job.update_attributes!({
-        :token  => Twitter.options[:oauth_token],
-        :secret => Twitter.options[:oauth_token_secret],
+        :token  => @user_profile[:access_token],
+        :secret => @user_profile[:access_token_secret],
       })
     else
       Bucket.create!({
         :serial => @user_profile[:twitter_id],
-        :token  => Twitter.options[:oauth_token],
-        :secret => Twitter.options[:oauth_token_secret],
+        :token  => @user_profile[:access_token],
+        :secret => @user_profile[:access_token_secret],
       })
     end
 
@@ -106,11 +106,12 @@ class RootsController < ApplicationController
 
   def stats
     set_user_profile
+    twitter = twitter_from_session
 
     job = Bucket.find_by_serial(@user_profile[:twitter_id]) || (raise StandardError)
     stats = {
       :destroy_count  => job.destroy_count,
-      :remaining_hits => Twitter.rate_limit_status['remaining_hits'],
+      :remaining_hits => twitter.rate_limit_status['remaining_hits'],
       :elapsed_time   => job.elapsed_time,
       :page           => job.page
     }
@@ -172,16 +173,18 @@ class RootsController < ApplicationController
 
   def set_user_profile
     if session[:user_profile].blank?
-      set_twitter_from_session
+      twitter = twitter_from_session
       session[:user_profile] = {
-        :twitter_id          => Twitter.user.id,
-        :twitter_screen_name => Twitter.user.screen_name
+        :twitter_id          => twitter.user.id,
+        :twitter_screen_name => twitter.user.screen_name,
+        :access_token        => session[:access_token],
+        :access_token_secret => session[:access_token_secret],
       }
     end
     @user_profile = session[:user_profile]
   end
 
-  def set_twitter_from_session
+  def twitter_from_session
     consumer = consumer_from_configatron
     access_token = access_token_from_session
     Twitter.configure do |config|
@@ -190,6 +193,7 @@ class RootsController < ApplicationController
       config.oauth_token        = access_token.token
       config.oauth_token_secret = access_token.secret
     end
+    Twitter::Client.new
   end
 
   def access_token_from_session
