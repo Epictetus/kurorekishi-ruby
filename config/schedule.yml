@@ -1,5 +1,5 @@
 clean:
-  every: '15s'
+  every: '5s'
   class: 'Clean'
   queue: 'cleaner'
   description: 'Clean Job'

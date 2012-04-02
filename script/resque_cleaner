@@ -16,7 +16,7 @@ class CleanerDaemon < DaemonSpawn::Base
 end
 
 CleanerDaemon.spawn!({
-  :processes => 2,
+  :processes => 5,
   :log_file => File.join(Rails.root, "log", "cleaner.log"),
   :pid_file => File.join(Rails.root, 'tmp', 'pids', 'cleaner.pid'),
   :sync_log => true,
