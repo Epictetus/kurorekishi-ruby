@@ -46,6 +46,10 @@
             if (confirm('ステータス情報を取得できませんでした。ログインしなおすとなおるかも？ログアウトしますか？')) {
               location.href = '#{logout_path}';
             }
+            else {
+              clearInterval(KC.panel.status_timer);
+              KC.panel.status_timer = null;
+            }
           }
         });
       }
