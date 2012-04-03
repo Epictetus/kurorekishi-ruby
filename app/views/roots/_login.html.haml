@@ -21,14 +21,14 @@
 %section
   .row-fluid
     .span12
-      .well
-        %div.label.label-important{style:'text-align:center;'}
-          [お知らせ] 負荷の高い状態が続いています
-        %p{style:'margin-top:10px;font-size:11px;'}
-          → 2012/04/01<br>
-          現在想定よりも多くのアクセスをいただいており、システムが不安定になっている場合がございます。
-          削除登録できない場合は、<a href='https://twitter.com/#!/cohakims_work'>@cohakim</a> までご一報いただけると大変助かります。
-
+      %div.label.label-success{style:'margin-bottom:20px; text-align:center;'}
+        = "[現在の混雑度] #{@service_profile[:target_count].to_s}人を処理中"
+        - if @service_profile[:target_count] <= 85
+          (空き)
+        - elsif @service_profile[:target_count]<= 170
+          (普通)
+        - else
+          (混雑)
 
 %section
   .row-fluid

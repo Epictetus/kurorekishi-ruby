@@ -46,17 +46,6 @@ class RootsController < ApplicationController
     end
   end
 
-  def notification
-    raise 'メール送信テストです'
-  rescue => ex
-    ExceptionNotifier::Notifier.exception_notification(request.env, ex).deliver
-    flash[:notice] = 'メール送信テストです'
-
-    respond_to do |format|
-      format.html { redirect_to root_url }
-    end
-  end
-
   ############################################################################
 
   def clean
@@ -147,7 +136,9 @@ class RootsController < ApplicationController
   protected
 
   def set_service_profile
-    @service_profile = Stats.fetch
+    @service_profile = {}
+    @service_profile.merge!({ :target_count => Bucket.count_job })
+    @service_profile.merge!(Stats.fetch)
   end
 
   def set_twitter_authorize_url

@@ -8,7 +8,6 @@ Kurorekishi::Application.routes.draw do
   match 'abort' => 'roots#abort', :path => 'abort', :as => 'abort'
   match 'stats' => 'roots#stats', :path => 'stats', :as => 'stats'
   match 'logout' => 'roots#logout', :path => 'logout', :as => 'logout'
-  match 'notification' => 'roots#notification', :path => 'notification', :as => 'notification'
 
   root :to => "roots#show"
 end

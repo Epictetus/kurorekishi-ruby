@@ -32,6 +32,12 @@ class Bucket < ActiveRecord::Base
 
   ############################################################################
 
+  def self.count_job
+    Bucket.where("page <= 160 AND auth_failed_count <= 3").count
+  end
+
+  ############################################################################
+
   def done?
     page > 160
   end
