@@ -12,6 +12,7 @@
 #  last_processed_at :datetime
 #  created_at        :datetime        not null
 #  updated_at        :datetime        not null
+#  auth_failed_count :integer(4)      default(0)
 #
 # Indexes
 #
@@ -24,7 +25,8 @@ class Bucket < ActiveRecord::Base
     c1 = 'last_processed_at IS NULL'
     c2 = 'last_processed_at < DATE_ADD(NOW(), INTERVAL -4 MINUTE)'
     c3 = 'page <= 160'
-    where("(#{c1} OR #{c2}) AND #{c3}").order('last_processed_at, id')
+    c4 = 'auth_failed_count <= 3'
+    where("(#{c1} OR #{c2}) AND #{c3} AND #{c4}").order('last_processed_at, id')
   }
   scope :expired, where('created_at < DATE_ADD(NOW(), INTERVAL -2 DAY)')
 

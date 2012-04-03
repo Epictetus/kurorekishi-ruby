@@ -12,6 +12,7 @@
 #  last_processed_at :datetime
 #  created_at        :datetime        not null
 #  updated_at        :datetime        not null
+#  auth_failed_count :integer(4)      default(0)
 #
 # Indexes
 #

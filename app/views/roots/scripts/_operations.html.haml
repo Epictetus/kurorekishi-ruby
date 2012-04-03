@@ -43,12 +43,12 @@
             KC.panel.updateStatus(data);
           },
           error: function() {
+            clearInterval(KC.panel.status_timer);
+            KC.panel.status_timer = null;
             if (confirm('削除ステータスを取得できませんでした。何度も失敗する場合はログインしなおしてください。ログインしなおしますか？')) {
               location.href = '#{logout_path}';
             }
             else {
-              clearInterval(KC.panel.status_timer);
-              KC.panel.status_timer = null;
               $('#progress').replaceWith('<p class="pending">表示の自動更新が停止されました<br>ページをリロードすると再開されます</p>');
             }
           }

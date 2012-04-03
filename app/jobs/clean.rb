@@ -18,26 +18,31 @@ class Clean
     # twitter client設定
     twitter = twitter_client(job.token, job.secret)
 
-    # API残確認
-    rest = twitter.rate_limit_status['remaining_hits']
-    if rest <= 20 then return end
+    begin
+      # API残確認
+      rest = twitter.rate_limit_status['remaining_hits']
+      if rest <= 20 then return end
 
-    # 処理対象のタイムライン取得
-    if twitter.user.protected?
-      timeline = twitter.user_timeline(job.serial.to_i, {
-        :page        => job.page,
-        :count       => 20,
-        :include_rts => true,
-        :trim_user   => true,
-      })
-    else
-      timeline = twitter.user_timeline(job.serial.to_i, {
-        :page        => job.page,
-        :max_id      => job.max_id.try(:to_i),
-        :count       => 20,
-        :include_rts => true,
-        :trim_user   => true,
-      })
+      # 処理対象のタイムライン取得
+      if twitter.user.protected?
+        timeline = twitter.user_timeline(job.serial.to_i, {
+          :page        => job.page,
+          :count       => 20,
+          :include_rts => true,
+          :trim_user   => true,
+        })
+      else
+        timeline = twitter.user_timeline(job.serial.to_i, {
+          :page        => job.page,
+          :max_id      => job.max_id.try(:to_i),
+          :count       => 20,
+          :include_rts => true,
+          :trim_user   => true,
+        })
+      end
+    rescue Twitter::Error::Unauthorized => ex
+      job.increment!(:auth_failed_count)
+      raise ex
     end
 
     # max_idの保存
