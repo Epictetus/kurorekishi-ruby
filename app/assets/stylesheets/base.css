@@ -10,7 +10,9 @@ input {
 .ad {
   margin: 0;
   margin-bottom: 5px;
+  pagging: 0;
   text-align: center;
+  width: 320px;
 }
 
 .help-link {
@@ -63,4 +65,9 @@ iframe.twitter-share-button {
 p.congratulations {
   text-align: center;
   color: #468847;
+}
+
+p.pending {
+  text-align: center;
+  color: #A47E3C;
 }

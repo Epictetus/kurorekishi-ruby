@@ -13,7 +13,7 @@
               KC.panel.switch('status');
             },
             500: function() {
-              if (confirm('削除リクエストに失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
+              if (confirm('削除リクエストに失敗しました。ログインしなおすとなおるかも？ログインしなおしますか？')) {
                 location.href = '#{logout_path}';
               }
             },
@@ -29,7 +29,7 @@
               location.href = '#{logout_path}';
             },
             500: function() {
-              if (confirm('削除処理の完了に失敗しました。ログインしなおすとなおるかも？ログアウトしますか？')) {
+              if (confirm('削除処理の完了に失敗しました。ログインしなおすとなおるかも？ログインしなおしますか？')) {
                 location.href = '#{logout_path}';
               }
             },
@@ -43,12 +43,13 @@
             KC.panel.updateStatus(data);
           },
           error: function() {
-            if (confirm('ステータス情報を取得できませんでした。ログインしなおすとなおるかも？ログアウトしますか？')) {
+            if (confirm('削除ステータスを取得できませんでした。何度も失敗する場合はログインしなおしてください。ログインしなおしますか？')) {
               location.href = '#{logout_path}';
             }
             else {
               clearInterval(KC.panel.status_timer);
               KC.panel.status_timer = null;
+              $('#progress').replaceWith('<p class="pending">表示の自動更新が停止されました<br>ページをリロードすると再開されます</p>');
             }
           }
         });
