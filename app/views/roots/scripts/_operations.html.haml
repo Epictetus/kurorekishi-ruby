@@ -86,8 +86,11 @@
         $('#destroy_count').html(status['destroy_count']);
         $('#remaining_hits').html(status['remaining_hits']);
         $('#elapsed_time').html(status['elapsed_time']);
+        if (status['auth_failed_count'] > 3) {
+          $('#progress').replaceWith('<p class="pending">削除は停止されました。認証情報が無効です。<br>削除処理を完了してください。</p>');
+        }
         if (status['page'] > 160) {
-          $('#progress').replaceWith('<p class="congratulations">congratulations!</p>');
+          $('#progress').replaceWith('<p class="congratulations">全てのツイートが削除されました。<br>削除処理を完了してください。</p>');
         }
         else {
           $('#progress > .bar').width((status['page'] / 160 * 100) + '%');

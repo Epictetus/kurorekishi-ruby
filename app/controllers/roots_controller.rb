@@ -51,19 +51,12 @@ class RootsController < ApplicationController
   def clean
     set_user_profile
 
-    job = Bucket.find_by_serial(@user_profile[:twitter_id])
-    if job.present?
-      job.update_attributes!({
-        :token  => @user_profile[:access_token],
-        :secret => @user_profile[:access_token_secret],
-      })
-    else
-      Bucket.create!({
-        :serial => @user_profile[:twitter_id],
-        :token  => @user_profile[:access_token],
-        :secret => @user_profile[:access_token_secret],
-      })
-    end
+    Bucket.create!({
+      :serial => @user_profile[:twitter_id],
+      :token  => @user_profile[:access_token],
+      :secret => @user_profile[:access_token_secret],
+      :auth_failed_count => 0,
+    })
 
     respond_to do |format|
       format.json { render :nothing => true, :status => 200 }
@@ -102,7 +95,8 @@ class RootsController < ApplicationController
       :destroy_count  => job.destroy_count,
       :remaining_hits => twitter.rate_limit_status['remaining_hits'],
       :elapsed_time   => job.elapsed_time,
-      :page           => job.page
+      :page           => job.page,
+      :auth_failed_count => job.auth_failed_count
     }
 
     respond_to do |format|
