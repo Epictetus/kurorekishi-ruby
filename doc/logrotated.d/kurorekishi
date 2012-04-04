@@ -1,0 +1,12 @@
+/var/www/app/kurorekishi/shared/log/*.log {
+  daily
+  missingok
+  rotate 1
+  create
+  sharedscripts
+  postrotate
+    touch /var/www/app/kurorekishi/current/tmp/restart.txt
+    s3cmd put /var/www/app/kurorekishi/shared/log/production.log.1 \
+              s3://cohakim.kurorekishi/logs/`date '+%Y'`/`date '+%m'`/production.log.`date '+%d'`
+  endscript
+}

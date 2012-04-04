@@ -76,6 +76,9 @@
           KC.panel.status_timer = null;
         }
         else {
+          if (KC.panel.status_timer != null) {
+            return;
+          }
           KC.request.status();
           KC.panel.status_timer = setInterval(function() {
             KC.request.status();
