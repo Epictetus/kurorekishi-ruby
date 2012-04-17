@@ -1,0 +1,24 @@
+
+- content_for :scripts do
+  :javascript
+    KC.twitter = {
+      request_url: '',
+      ////////////////////////////////////////////////////////////////////////
+      updateRequestURL: function() {
+        $.ajax({
+          url: '#{authorize_url_twitter_path}', type: 'GET', dataType: 'json',
+          success: function(data, status, xhr) {
+            $('#login').removeClass('disabled');
+            $('#login').attr('href', data['authorize_url']);
+          },
+          error: function() {
+            alert("Twitterが混雑しているため、サービスを利用できません。\n画面を再読み込みしてください。");
+          },
+        });
+      },
+    };
+
+  :javascript
+    $(document).bind('ready', function() {
+      KC.twitter.updateRequestURL();
+    });

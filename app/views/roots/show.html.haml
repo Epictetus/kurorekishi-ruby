@@ -1,24 +1,41 @@
 
-- if @authorized
-  = render :partial => 'roots/scripts/operations'
+= render :partial => 'roots/scripts/service'
+= render :partial => 'roots/scripts/twitter'
 
-%header#overview.jumbotron.subhead
-  %h1
-    黒歴史クリーナー
-  %p.lead
-    あなたの黒歴史を完全消去
-    #count.label.label-success
-      = "（計#{@service_profile[:users_count]}人#{@service_profile[:destroy_count]}件の黒歴史を消去）"
-- if !@queued && !@authorized
-  = render :partial => 'login'
-- else
-  = render :partial => 'dashboard'
+#count.label.label-success
+  = '（計---人---件の黒歴史を消去）'
 
 %section
   .row-fluid
     .span12
-      = render :partial => 'roots/scripts/social_bookmarks'
+      .well
+        %ul{style:'font-size:11px;'}
+          %li 簡単操作であなたのツイートを全消去！
+          %li ブラウザを閉じていても削除されます！
+          %li 1時間に300件ずつ消去します！
+          %li いつでもキャンセル可能です！
+          %li 削除中でも新着のツイートは消えません！
+        %p.help-link{style:'margin-top:0px;margin-bottom:15px;font-size:11px;'}
+          = link_to 'もっと詳しくみる', help_path, :target => '_blank', :class => 'help-link'
+        = link_to 'Twitterの黒歴史を消去する', '#', :class => 'btn btn-primary disabled', :id => 'login'
 
-%footer.footer
-  %p
-    © 2012 <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a> All Rights Reserved.
+%section
+  .row-fluid
+    .span12
+      #busy.label.label-success{style:'margin-bottom:20px; text-align:center;'}
+        = "[混雑度] ---人を処理中（---）"
+
+%section
+  .row-fluid
+    .span12
+      .well
+        %div.label.label-warning{style:'text-align:center;'}
+          紹介記事を書いていただきました！
+        %p{style:'margin-top:10px;font-size:11px;'}
+          → <a href='http://www.lifehacker.jp/2012/03/120330kurokekishi.html' target='_blank'>新社会人＆転職者必見！　過去のtweetを抹消できる「黒歴史クリーナー」</a><br>
+          「ライフハッカー」様に取り上げていただきました！ありがとうございます(>ω<)<br>
+        %p{style:'margin-top:10px;font-size:11px;'}
+          → <a href='http://okinokio.blog.fc2.com/blog-entry-2.html' target='_blank'>Twitterのツイートを全件削除する方法</a><br>
+          「俺はブログが書けない」様に紹介記事を書いていただきました！ありがとうございます(>ω<)<br>
+        %p.help-link{style:'margin-top:0px;font-size:11px;'}
+          = link_to 'もっと詳しくみる', media_path, :target => '_blank', :class => 'help-link'

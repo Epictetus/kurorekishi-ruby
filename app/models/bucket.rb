@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 # == Schema Information
 #
 # Table name: buckets
@@ -34,6 +36,18 @@ class Bucket < ActiveRecord::Base
 
   def self.count_job
     Bucket.where("page <= 160 AND auth_failed_count <= 3").count
+  end
+
+  def self.busyness
+    busyness = ''
+    if Bucket.count_job <= 75
+      busyness = '空き'
+    elsif Bucket.count_job <= 150
+      busyness = '普通'
+    else
+      busyness = '混雑'
+    end
+    busyness
   end
 
   ############################################################################

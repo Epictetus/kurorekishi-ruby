@@ -1,13 +1,22 @@
 Kurorekishi::Application.routes.draw do
   # root
-  resource :roots, :only => [:show]
-  match 'help' => 'roots#help', :path => 'help', :as => 'help'
-  match 'media' => 'roots#media', :path => 'media', :as => 'media'
-  match 'oauth_callback' => 'roots#oauth_callback', :path => 'oauth_callback', :as => 'oauth_callback'
-  match 'clean' => 'roots#clean', :path => 'clean', :as => 'clean'
-  match 'abort' => 'roots#abort', :path => 'abort', :as => 'abort'
-  match 'stats' => 'roots#stats', :path => 'stats', :as => 'stats'
-  match 'logout' => 'roots#logout', :path => 'logout', :as => 'logout'
+  scope :module => 'roots' do
+    get 'show'  => 'roots#show', :path => 'show', :as => 'show'
+    get 'help'  => 'roots#help', :path => 'help', :as => 'help'
+    get 'media' => 'roots#media', :path => 'media', :as => 'media'
+  end
+
+  # root
+  resource  :cleaner
+  resources :cleaners, :only => [:index]
+
+
+  # sessions
+  scope :module => 'sessions' do
+    get :new,     :path => 'twitter/authorize_url', :as => 'authorize_url_twitter'
+    get :create,  :path => '/login',  :as => 'login'
+    get :destroy, :path => '/logout', :as => 'logout'
+  end
 
   root :to => "roots#show"
 end

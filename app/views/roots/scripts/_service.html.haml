@@ -1,0 +1,24 @@
+
+- content_for :scripts do
+  :javascript
+    KC.service = {
+      status: { users_count: '---', destroy_count: '---', target_count: '---', busyness: '---' },
+      ////////////////////////////////////////////////////////////////////////
+      updateStatus: function() {
+        $.ajax({
+          url: '#{cleaners_path}', type: 'GET', dataType: 'json',
+          success: function(data, status, xhr) {
+            KC.service.status = data;
+            $.template('cleaners_status', '（計${users_count}人${destroy_count}件の黒歴史を消去）');
+            $('#count').html($.tmpl('cleaners_status', KC.service.status));
+            $.template('cleaners_busy', '[混雑度] ${target_count}人を処理中（${busyness}）');
+            $('#busy').html($.tmpl('cleaners_busy', KC.service.status));
+          }
+        });
+      },
+    };
+
+  :javascript
+    $(document).bind('ready', function() {
+      KC.service.updateStatus();
+    });

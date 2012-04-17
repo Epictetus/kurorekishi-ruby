@@ -1,0 +1,19 @@
+
+- content_for :scripts do
+  :javascript
+    $('input').bind('keyup', function() {
+      if ($(this).val() == '') {
+        $(this).parent().parent().parent().removeClass('success').removeClass('error');
+        $('#submit').attr("disabled", "disabled");
+      }
+      else if ($(this).val() == '#{@user_profile[:twitter_screen_name]}') {
+        $(this).parent().parent().parent().removeClass('success').removeClass('error');
+        $(this).parent().parent().parent().addClass('success');
+        $('#submit').removeAttr('disabled');
+      }
+      else {
+        $(this).parent().parent().parent().removeClass('success').removeClass('error');
+        $(this).parent().parent().parent().addClass('error');
+        $('#submit').attr("disabled", "disabled");
+      }
+    });

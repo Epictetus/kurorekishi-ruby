@@ -1,0 +1,39 @@
+
+= render :partial => 'roots/scripts/service'
+= render :partial => 'cleaners/scripts/job'
+
+- content_for :ad_top do
+  = render :partial => 'layouts/scripts/adsense_top'
+- content_for :ad_middle do
+  = render :partial => 'layouts/scripts/adsense_body'
+
+#count.label.label-success
+  = '（計---人---件の黒歴史を消去）'
+
+%section
+  .row-fluid
+    .span12
+      .well
+        .control-group
+          .controls
+            .input-prepend
+              %span.add-on
+                ＠
+              %input.span2{value:@user_profile[:twitter_screen_name],readonly:true,style:'width:200px;'}
+          #progress.progress.progress-danger.progress-striped.active
+            .bar
+          .status{style:'text-align:center;'}
+            %span.label.label-info<
+              = ' 削除数:'
+              = content_tag :span, '---', :id => 'destroy_count'
+            %span.label.label-info<
+              = 'API残:'
+              = content_tag :span, '---', :id => 'remaining_hits'
+            %span.label.label-info<
+              = '経過:'
+              = content_tag :span, '---', :id => 'elapsed_time'
+            %span.label.label-info<
+              = 'ページ:'
+              = content_tag :span, '---', :id => 'page'
+        .help-link
+          = link_to '削除処理を完了する', cleaner_path, :method => :delete, :confirm => '削除処理を完了します。よろしいですか？'

@@ -1,0 +1,31 @@
+
+= render :partial => 'roots/scripts/service'
+= render :partial => 'cleaners/scripts/confirmation'
+
+- content_for :ad_top do
+  = render :partial => 'layouts/scripts/adsense_top'
+- content_for :ad_middle do
+  = render :partial => 'layouts/scripts/adsense_body'
+
+#count.label.label-success
+  = '（計---人---件の黒歴史を消去）'
+
+%section#clean_box
+  .row-fluid
+    .span12
+      .well
+        = form_tag cleaner_path, :method => :post do
+          .control-group
+            .controls
+              .input-prepend
+                %span.add-on
+                  ＠
+                %input.span2{autocapitalize:'off',style:'width:200px;'}
+                %div{style: 'text-align:center;'}
+                  = button_tag '開始', :disabled => :disabled,
+                      :id => 'submit', :class => 'btn btn-primary',
+                      :disable_with => '送信中...',
+                      :style => 'width: auto;padding: 3px 40px;'
+              %p.help-inline
+                消去を行います<br>
+                確認のためTwiter IDを入力してください

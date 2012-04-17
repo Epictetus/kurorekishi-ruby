@@ -4,18 +4,25 @@
     %title あなたのツイートを一括削除！ - 黒歴史クリーナー
     = stylesheet_link_tag :application
     = javascript_include_tag :application
+    = javascript_include_tag 'http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js'
     = tag(:meta, :name => 'viewport', :content => 'width=device-width, user-scalable=no, initial-scale=1.0')
     = tag(:meta, :name => 'apple-mobile-web-app-status-bar-style', :content => 'black-translucent')
     = csrf_meta_tags
     :javascript
       $(window).bind('load', function() { setTimeout(function() { window.scrollTo(0, 1) }, 1); });
+    :javascript
+      var KC = {};
+
   %body
     = yield :ad_top
     .container-fluid
       - if flash.present?
         .alert.alert-error
           != flash[:notice]
+      = render :partial => 'layouts/header'
       = yield
+      = render :partial => 'layouts/bookmark'
+      = render :partial => 'layouts/footer'
     = yield :ad_middle
     = yield :scripts
     = render :partial => 'layouts/scripts/analytics'
