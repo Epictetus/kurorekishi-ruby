@@ -143,14 +143,12 @@ GEM
     redis (2.2.2)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
+    resque-loner (1.2.0)
+      resque (~> 1.0)
     resque-pool (0.2.0)
       rake
       resque (~> 1.13)
       trollop (~> 1.16)
-    resque-scheduler (1.9.9)
-      redis (>= 2.0.1)
-      resque (>= 1.8.0)
-      rufus-scheduler
     rspec (2.9.0)
       rspec-core (~> 2.9.0)
       rspec-expectations (~> 2.9.0)
@@ -164,8 +162,6 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.9.0)
-    rufus-scheduler (2.0.16)
-      tzinfo (>= 0.3.23)
     sass (3.1.15)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -233,8 +229,8 @@ DEPENDENCIES
   rails (= 3.2.2)
   rb-fsevent
   resque!
+  resque-loner
   resque-pool
-  resque-scheduler
   rspec-rails
   sass-rails (~> 3.2.3)
   simplecov

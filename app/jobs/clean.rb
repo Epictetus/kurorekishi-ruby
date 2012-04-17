@@ -1,5 +1,6 @@
 
 class Clean
+  include Resque::Plugins::UniqueJob
   @queue = :cleaner
 
   def self.perform
