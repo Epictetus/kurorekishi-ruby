@@ -24,21 +24,17 @@ class Clean
       if rest <= 20 then return end
 
       # 処理対象のタイムライン取得
+      options = {
+        :page        => job.page,
+        :count       => 20,
+        :include_rts => true,
+        :trim_user   => true,
+      }
       if twitter.user.protected?
-        timeline = twitter.user_timeline(job.serial.to_i, {
-          :page        => job.page,
-          :count       => 20,
-          :include_rts => true,
-          :trim_user   => true,
-        })
+        timeline = twitter.user_timeline(job.serial.to_i, options)
       else
-        timeline = twitter.user_timeline(job.serial.to_i, {
-          :page        => job.page,
-          :max_id      => job.max_id.try(:to_i),
-          :count       => 20,
-          :include_rts => true,
-          :trim_user   => true,
-        })
+        options.merge!({ :max_id => job.max_id.to_i }) if job.max_id.present?
+        timeline = twitter.user_timeline(job.serial.to_i, options)
       end
     rescue Twitter::Error::Unauthorized => ex
       job.increment!(:auth_failed_count)
