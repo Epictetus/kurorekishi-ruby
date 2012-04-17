@@ -1,9 +1,9 @@
 Kurorekishi::Application.routes.draw do
   # root
   scope :module => 'roots' do
-    get 'show'  => 'roots#show', :path => 'show', :as => 'show'
-    get 'help'  => 'roots#help', :path => 'help', :as => 'help'
-    get 'media' => 'roots#media', :path => 'media', :as => 'media'
+    get :show, :path => 'show', :as => 'show'
+    get :help, :path => 'help', :as => 'help'
+    get :media, :path => 'media', :as => 'media'
   end
 
   # root

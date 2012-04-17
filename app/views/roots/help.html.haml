@@ -1,9 +1,6 @@
 
-%header
-  %h1{style:'margin-top: 15px;'}
-    黒歴史クリーナー
-  %p.lead
-    あなたの黒歴史を完全消去
+- content_for :ad_top do
+  = render :partial => 'layouts/scripts/adsense_top'
 
 %section#help
   .row-fluid
@@ -44,6 +41,3 @@
           Twitter: <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a><br>
           BLOG: <a href='http://blog.yabasoft.biz/' target='_blank'>cohakim's blog</a><br>
           作ったアプリとか: <a href='http://cohakim.github.com/AboutMe/' target='_blank'>AboutMe</a><br>
-%footer.footer
-  %p
-    © 2012 <a href='https://twitter.com/#!/cohakims_work' target='_blank'>@cohakim</a> All Rights Reserved.

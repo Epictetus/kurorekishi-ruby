@@ -16,4 +16,15 @@ class RootsController < ApplicationController
     end
   end
 
+  def help
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def media
+    respond_to do |format|
+      format.html
+    end
+  end
 end

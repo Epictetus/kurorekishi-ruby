@@ -40,10 +40,8 @@ namespace :batch do
   task :start, :roles => :batch do
     run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_tweet_bot start"
     run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_cleaner start"
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/resque_scheduler start"
   end
   task :stop, :roles => :batch do
-    run "cd #{current_path} && script/resque_scheduler stop"
     run "cd #{current_path} && script/resque_cleaner stop"
     run "cd #{current_path} && script/resque_tweet_bot stop"
   end
