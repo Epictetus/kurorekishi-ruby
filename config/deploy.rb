@@ -25,6 +25,11 @@ set :bundle_without,  [:development, :test]
 set :bundle_cmd,      'bundle'
 set :bundle_roles,    [:web]
 
+# for whenever
+require 'whenever/capistrano'
+set :whenever_command, 'bundle exec whenever'
+set :whenever_roles, [:app]
+
 # for container
 namespace :web do
   task :restart, :roles => :web, :except => { :no_release => true } do
