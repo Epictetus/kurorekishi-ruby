@@ -30,7 +30,7 @@ class Mention
         :context => :mention_destroy,
         :users   => prtool.users.merge(tweets)
       })
-      Twitter.update(chuni_tweet) if rand(8) == 0
+      Twitter.update(chuni_tweet) if rand(3) == 0
     end
     nil
   end
