@@ -21,6 +21,7 @@
           != flash[:notice]
       = render :partial => 'layouts/header'
       = yield
+      = render :partial => 'roots/scripts/widget'
       = render :partial => 'layouts/bookmark'
       = render :partial => 'layouts/footer'
     = yield :ad_middle

@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 class Mention
-  include Resque::Plugins::UniqueJob
   @queue = :tweet_bot
 
   def self.perform

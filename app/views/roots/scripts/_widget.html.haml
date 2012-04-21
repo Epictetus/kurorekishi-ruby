@@ -1,0 +1,32 @@
+
+:plain
+  <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+  <script>
+  new TWTR.Widget({
+    version: 2,
+    type: 'search',
+    search: '#kurorekishi_cleaner',
+    interval: 30000,
+    title: '黒歴史クリーナー更新情報',
+    subject: '',
+    width: 'auto',
+    height: 150,
+    theme: {
+      shell: {
+        background: '#192123',
+        color: '#ffffff',
+      },
+      tweets: {
+        background: '#182023',
+        color: '#999999',
+        links: '#51b5e5'
+      }
+    },
+    features: {
+      scrollbar: false,
+      loop: true,
+      live: true,
+      behavior: 'default'
+    }
+  }).render().start();
+  </script>
