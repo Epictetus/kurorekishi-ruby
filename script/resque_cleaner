@@ -10,7 +10,7 @@ class CleanerDaemon < DaemonSpawn::Base
     # @worker.work(1)
     @pid = Process.spawn("bundle exec resque-pool --environment #{Rails.env}")
     while true do
-      Resque.enqueue(Clean)
+      Resque.enqueue(Clean) if Resque.size('cleaner') <= 5
       sleep(5)
     end
   end
