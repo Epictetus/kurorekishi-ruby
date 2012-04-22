@@ -15,24 +15,22 @@ class Mention
     prtool = Prtool.find_or_create_by_context(:mention_destroy)
     prtool.users ||= Hash.new
     begin
-      count = 0
       tweets = Hash.new
       Twitter.search(conditions, opts).each do |tweet|
         next if prtool.users.has_key?(tweet.from_user_id)
-        next if count > 2
         Twitter.update(
           "@#{tweet.from_user} #{chuni_reply}",
           { :in_reply_to_status_id => tweet.id, :trim_user => true }
         )
         tweets[tweet.from_user_id] = tweet.id
-        count += 1
+        break
       end
     ensure
       prtool.update_attributes!({
         :context => :mention_destroy,
         :users   => prtool.users.merge(tweets)
       })
-      Twitter.update(chuni_tweet) if rand(3) == 0
+      Twitter.update(chuni_tweet)
     end
     nil
   end
