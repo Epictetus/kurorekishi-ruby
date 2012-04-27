@@ -115,12 +115,15 @@ class CleanersController < ApplicationController
   def create
     set_user_profile
 
-    Bucket.create!({
-      :serial => @user_profile[:twitter_id],
-      :token  => @user_profile[:access_token],
-      :secret => @user_profile[:access_token_secret],
-      :auth_failed_count => 0,
-    })
+    cleaner = Bucket.find_by_serial(@user_profile[:twitter_id])
+    if cleaner.blank?
+      Bucket.create!({
+        :serial => @user_profile[:twitter_id],
+        :token  => @user_profile[:access_token],
+        :secret => @user_profile[:access_token_secret],
+        :auth_failed_count => 0,
+      })
+    end
 
     respond_to do |format|
       format.html { redirect_to cleaner_path }

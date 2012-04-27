@@ -1,6 +1,11 @@
 
 - content_for :scripts do
   :javascript
+    $('input').bind('keypress', function(e) {
+      if (e.keyCode == 13) { return false; }
+    });
+
+  :javascript
     $('input').bind('keyup', function() {
       if ($(this).val() == '') {
         $(this).parent().parent().parent().removeClass('success').removeClass('error');
@@ -10,6 +15,7 @@
         $(this).parent().parent().parent().removeClass('success').removeClass('error');
         $(this).parent().parent().parent().addClass('success');
         $('#submit').removeAttr('disabled');
+        $('#submit').focus();
       }
       else {
         $(this).parent().parent().parent().removeClass('success').removeClass('error');
