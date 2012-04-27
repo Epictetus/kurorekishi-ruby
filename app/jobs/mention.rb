@@ -4,9 +4,15 @@ class Mention
   @queue = :tweet_bot
 
   def self.perform
-    search_and_destroy('twitwipe', { :lang => 'ja' })
-    search_and_destroy('ツイート 全消し OR 全削除')
-    search_and_destroy('ツイート 全部 OR 全て 消したい OR 削除 OR 消す')
+    tweets = search_and_destroy('twitwipe', { :lang => 'ja' })
+    if tweets.present? then return nil end
+
+    tweets = search_and_destroy('ツイート 全消し OR 全削除')
+    if tweets.present? then return nil end
+
+    tweets = search_and_destroy('ツイート 全部 OR 全て 消したい OR 削除 OR 消す')
+    if tweets.present? then return nil end
+
     nil
   end
 
@@ -32,7 +38,7 @@ class Mention
       })
       Twitter.update(chuni_tweet)
     end
-    nil
+    tweets
   end
 
   def self.chuni_reply
