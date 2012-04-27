@@ -66,7 +66,7 @@ class TwitterController < ApplicationController
       OAuth::Consumer.new(
         configatron.twitter.consumer_key,
         configatron.twitter.consumer_secret,
-        :site => "http://twitter.com",
+        :site => 'http://twitter.com'
       )
     end
   end

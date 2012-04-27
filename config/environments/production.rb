@@ -69,6 +69,6 @@ Kurorekishi::Application.configure do
     ExceptionNotifier,
     :email_prefix => "[Exception] ",
     :sender_address => %{"kurorekishi" <kurorekishi@yabasoft.biz>},
-    :exception_recipients => %w{cohakim@gmail.com},
+    :exception_recipients => %w{cohakim@gmail.com}
   )
 end

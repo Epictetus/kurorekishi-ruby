@@ -2,7 +2,7 @@ set  :application, 'kurorekishi'
 role :web,   'web'
 role :app,   'app'
 role :db,    'app', :primary => true
-role :batch, 'kurorekishi'
+role :batch, 'kurorekishi2'
 
 set :scm,         :git
 set :user,        'app'
