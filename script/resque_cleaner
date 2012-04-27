@@ -2,18 +2,27 @@
 
 ENV['RAILS_ENV'] ||= 'development'
 require ::File.expand_path('../../config/environment',  __FILE__)
+require 'Monitor'
 
 class CleanerDaemon < DaemonSpawn::Base
   def start(args)
-    @pid = Process.spawn("bundle exec resque-pool --environment #{Rails.env}")
-    while true do
-      Resque.enqueue(Clean) if Resque.size('cleaner') <= 5
+    @continue = true
+    count = 0
+    lock = Monitor.new
+    while @continue do
+      if count < 16
+        Thread.new do
+          lock.synchronize{ count += 1 }
+          begin Clean.perform end
+          lock.synchronize{ count -= 1 }
+        end
+      end
       sleep(1)
     end
   end
 
   def stop
-    Process.kill('SIGTERM', @pid)
+    @continue = false
   end
 end
 
