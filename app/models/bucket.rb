@@ -24,7 +24,7 @@
 class Bucket < ActiveRecord::Base
   ############################################################################
   scope :active_jobs, lambda {
-    where(['reset_at IS NULL AND max_id > 0 AND auth_failed_count <= 3']).order('id')
+    where(['reset_at IS NULL AND page > 200 AND max_id > 0 AND auth_failed_count <= 3']).order('id')
   }
   scope :inactive_jobs, lambda {
     where(['reset_at IS NOT NULL AND max_id > 0 AND auth_failed_count <= 3']).order('id')
@@ -61,7 +61,7 @@ class Bucket < ActiveRecord::Base
   end
 
   def reseted_time
-    '@%sM' % ((reset_at.to_time - Time.now) / 60).truncate
+    '@%sM' % (reset_at.present? ? ((reset_at.to_time - Time.now) / 60).truncate : 0)
   end
 
   ############################################################################
