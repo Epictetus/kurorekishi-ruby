@@ -16,6 +16,8 @@ class Clean
     end
 
     # ツイート削除 -----------------------------------------------------------------
+    results = Array.new
+
     ts = Array.new
     Bucket.active_jobs.each do |job|
       ts << Thread.new do
@@ -47,10 +49,8 @@ class Clean
           end
           ts2.each{|t| t.join }
 
-          # 統計情報更新
-          job.increment!(:page)
-          job.increment!(:destroy_count, count)
-          Stats.store!(job.serial, count)
+          # 統計情報保存
+          results << { :job => job, :destroy_count => count }
         rescue Twitter::Error::Unauthorized => ex
           job.increment!(:auth_failed_count)
           raise ex
@@ -58,6 +58,13 @@ class Clean
       end
     end
     ts.each{|t| t.join }
+
+    # 統計情報更新 -----------------------------------------------------------------
+    results.each do |result|
+      result[:job].increment!(:page)
+      result[:job].increment!(:destroy_count, result[:destroy_count])
+      Stats.store!(result[:job].serial, result[:destroy_count])
+    end
 
     nil
   end
