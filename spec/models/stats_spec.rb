@@ -2,11 +2,11 @@
 #
 # Table name: stats
 #
-#  id            :integer(4)      not null, primary key
-#  destroy_count :integer(4)      default(0)
+#  id            :integer          not null, primary key
+#  destroy_count :integer          default(0)
 #  users         :text(16777215)
-#  created_at    :datetime        not null
-#  updated_at    :datetime        not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 require 'spec_helper'

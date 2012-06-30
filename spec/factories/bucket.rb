@@ -24,9 +24,9 @@ FactoryGirl.define do
     token              'token'
     secret             'secret'
     page               1
-    max_id             nil
+    max_id             0
     destroy_count      0
-    last_processed_at  nil
+    reset_at           nil
     created_at         { DateTime.now }
     updated_at         { DateTime.now }
   end
@@ -38,7 +38,7 @@ FactoryGirl.define do
     page               8
     max_id             '182363757203304448'
     destroy_count      128
-    last_processed_at  { 5.minutes.ago }
+    reset_at           { 5.minutes.ago }
     created_at         { 32.minutes.ago }
     updated_at         { 5.minutes.ago }
   end
@@ -50,7 +50,7 @@ FactoryGirl.define do
     page               161
     max_id             '182363757203304448'
     destroy_count      1024
-    last_processed_at  { 5.minutes.ago }
+    reset_at           { 5.minutes.ago }
     created_at         { 12.hours.ago }
     updated_at         { 5.minutes.ago }
   end
@@ -62,7 +62,7 @@ FactoryGirl.define do
     page               8
     max_id             '182363757203304448'
     destroy_count      128
-    last_processed_at  { 1.days.ago }
+    reset_at           { 1.days.ago }
     created_at         { 3.days.ago }
     updated_at         { 1.days.ago }
   end

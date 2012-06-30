@@ -4,17 +4,17 @@
 #
 # Table name: buckets
 #
-#  id                :integer(4)      not null, primary key
-#  serial            :string(255)     not null
-#  token             :string(255)     not null
-#  secret            :string(255)     not null
-#  page              :integer(4)      default(1)
+#  id                :integer          not null, primary key
+#  serial            :string(255)      not null
+#  token             :string(255)      not null
+#  secret            :string(255)      not null
 #  max_id            :string(255)
-#  destroy_count     :integer(4)      default(0)
-#  last_processed_at :datetime
-#  created_at        :datetime        not null
-#  updated_at        :datetime        not null
-#  auth_failed_count :integer(4)      default(0)
+#  page              :integer          default(0)
+#  destroy_count     :integer          default(0)
+#  reset_at          :datetime
+#  auth_failed_count :integer          default(0)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -38,16 +38,17 @@ class Bucket < ActiveRecord::Base
   end
 
   def self.busyness
-    busyness = ''
-    if Bucket.count_job <= 75
+    job = Bucket.active_jobs.order('updated_at DESC').first
+    if job.blank? || job.updated_at >= 7.minutes.ago
       busyness = '空き'
-    elsif Bucket.count_job <= 150
+    elsif job.updated_at >= 14.minutes.ago
       busyness = '普通'
     else
       busyness = '混雑'
     end
     busyness
   end
+
 
   ############################################################################
 

@@ -2,17 +2,17 @@
 #
 # Table name: buckets
 #
-#  id                :integer(4)      not null, primary key
-#  serial            :string(255)     not null
-#  token             :string(255)     not null
-#  secret            :string(255)     not null
-#  page              :integer(4)      default(1)
+#  id                :integer          not null, primary key
+#  serial            :string(255)      not null
+#  token             :string(255)      not null
+#  secret            :string(255)      not null
 #  max_id            :string(255)
-#  destroy_count     :integer(4)      default(0)
-#  last_processed_at :datetime
-#  created_at        :datetime        not null
-#  updated_at        :datetime        not null
-#  auth_failed_count :integer(4)      default(0)
+#  page              :integer          default(0)
+#  destroy_count     :integer          default(0)
+#  reset_at          :datetime
+#  auth_failed_count :integer          default(0)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -30,7 +30,7 @@ describe Bucket do
       before do
         buckets << created
       end
-      subject { Bucket.jobs.first }
+      subject { Bucket.active_jobs.first }
       it { should == created }
     end
 
@@ -39,7 +39,7 @@ describe Bucket do
       before do
         buckets << processing
       end
-      subject { Bucket.jobs.first }
+      subject { Bucket.active_jobs.first }
       it { should == processing }
     end
 
@@ -48,7 +48,7 @@ describe Bucket do
       before do
         buckets << finished
       end
-      subject { Bucket.jobs.first }
+      subject { Bucket.active_jobs.first }
       it { should == nil }
     end
 
@@ -57,7 +57,7 @@ describe Bucket do
       before do
         buckets << expired
       end
-      subject { Bucket.jobs.first }
+      subject { Bucket.active_jobs.first }
       it { should == expired }
     end
 
@@ -66,7 +66,7 @@ describe Bucket do
       before do
         buckets << processing
       end
-      subject { Bucket.jobs.first }
+      subject { Bucket.active_jobs.first }
       it { should == nil }
     end
 
@@ -76,7 +76,7 @@ describe Bucket do
       before do
         buckets << further << nearer
       end
-      subject { Bucket.jobs.first }
+      subject { Bucket.active_jobs.first }
       it { should == further }
     end
   end
