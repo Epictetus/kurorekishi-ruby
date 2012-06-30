@@ -7,7 +7,11 @@ class CleanerDaemon < DaemonSpawn::Base
   def start(args)
     @continue = true
     while @continue do
-      begin Clean.perform end
+      begin
+        Clean.perform
+      rescue => ex
+        puts "[#{DateTime.now.to_s(:db)}] error"
+      end
       sleep(5)
     end
   end
