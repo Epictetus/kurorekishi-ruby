@@ -10,7 +10,7 @@ class CleanerDaemon < DaemonSpawn::Base
       begin
         Clean.perform
       rescue => ex
-        puts "[#{DateTime.now.to_s(:db)}] error"
+        puts "[#{DateTime.now.to_s(:db)}] #{ex}"
       end
       sleep(5)
     end
