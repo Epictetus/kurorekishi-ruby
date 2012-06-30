@@ -4,7 +4,6 @@ gem 'rails', '3.2.2'
 gem 'mysql2'
 gem 'whenever', :require => false
 gem 'resque', :git => 'git://github.com/defunkt/resque.git'
-gem 'resque-pool', :require => false
 gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'configatron'
 gem 'net-netrc', :require => 'net/netrc'

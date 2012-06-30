@@ -27,6 +27,7 @@ class TwitterController < ApplicationController
         session[:user_profile] = {
           :twitter_id          => twitter.user.id,
           :twitter_screen_name => twitter.user.screen_name,
+          :max_id              => twitter.user_timeline.first.try(:id) || 0,
           :access_token        => session[:access_token],
           :access_token_secret => session[:access_token_secret],
         }
@@ -37,13 +38,12 @@ class TwitterController < ApplicationController
     def twitter_from_session
       consumer = consumer_from_configatron
       access_token = access_token_from_session
-      Twitter.configure do |config|
-        config.consumer_key       = consumer.key
-        config.consumer_secret    = consumer.secret
-        config.oauth_token        = access_token.token
-        config.oauth_token_secret = access_token.secret
-      end
-      Twitter::Client.new
+      Twitter::Client.new({
+        :consumer_key       => consumer.key,
+        :consumer_secret    => consumer.secret,
+        :oauth_token        => access_token.token,
+        :oauth_token_secret => access_token.secret,
+      })
     end
 
     def access_token_from_session

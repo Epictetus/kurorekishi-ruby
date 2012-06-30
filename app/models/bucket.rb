@@ -23,19 +23,18 @@
 
 class Bucket < ActiveRecord::Base
   ############################################################################
-  scope :jobs, lambda {
-    c1 = 'last_processed_at IS NULL'
-    c2 = 'last_processed_at < DATE_ADD(NOW(), INTERVAL -4 MINUTE)'
-    c3 = 'page <= 160'
-    c4 = 'auth_failed_count <= 3'
-    where("(#{c1} OR #{c2}) AND #{c3} AND #{c4}").order('last_processed_at, id')
+  scope :active_jobs, lambda {
+    where(['reset_at IS NULL AND max_id > 0 AND auth_failed_count <= 3']).order('id')
+  }
+  scope :inactive_jobs, lambda {
+    where(['reset_at IS NOT NULL AND max_id > 0 AND auth_failed_count <= 3']).order('id')
   }
   scope :expired, where('created_at < DATE_ADD(NOW(), INTERVAL -2 DAY)')
 
   ############################################################################
 
   def self.count_job
-    Bucket.where("page <= 160 AND auth_failed_count <= 3").count
+    Bucket.where('auth_failed_count <= 3').count
   end
 
   def self.busyness

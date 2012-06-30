@@ -12,17 +12,29 @@
             $('#remaining_hits').html(data['remaining_hits']);
             $('#elapsed_time').html(data['elapsed_time']);
             $('#page').html(data['page']);
-            if (data['auth_failed_count'] > 3) {
-              $('#progress').replaceWith('<p class="pending">削除は停止されました。認証情報が無効です。<br>削除処理を完了してください。</p>');
+            $('#progress > .bar').width((data['page'] / 160 * 100) + '%');
+            if (data['destroy_count'] != 0) {
+              $('#progress').removeClass('progress-danger');
             }
-            if (data['page'] > 160) {
-              $('#progress').replaceWith('<p class="congratulations">全てのツイートが削除されました。<br>削除処理を完了してください。</p>');
+            if (data['max_id'] == 0) {
+              $('#progress').hide();
+              $('#message').replaceWith('<p id="message" class="pending">取得可能なツイートが存在しないようです。<br>削除処理を完了してください。</p>');
+            }
+            else if (data['auth_failed_count'] > 3) {
+              $('#progress').hide();
+              $('#message').replaceWith('<p id="message" class="pending">削除は停止されました。認証情報が無効です。<br>削除処理を完了してください。</p>');
+            }
+            else if (data['page'] == 0) {
+              $('#progress').hide();
+              $('#message').replaceWith('<p id="message" class="pending">間もなく削除が開始されます。<br>このまましばらくお待ちください。</p>');
+            }
+            else if (data['page'] > 160) {
+              $('#progress').hide();
+              $('#message').replaceWith('<p id="message" class="congratulations">全てのツイートが削除されました。<br>削除処理を完了してください。</p>');
             }
             else {
-              $('#progress > .bar').width((data['page'] / 160 * 100) + '%');
-              if (data['destroy_count'] != 0) {
-                $('#progress').removeClass('progress-danger');
-              }
+              $('#progress').show();
+              $('#message').hide();
             }
           }
         });

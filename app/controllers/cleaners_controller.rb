@@ -51,17 +51,18 @@ class CleanersController < ApplicationController
     twitter = twitter_from_session
 
     begin
-      rate_limit_status = twitter.rate_limit_status['remaining_hits']
+      remaining_hits = twitter.rate_limit_status[:remaining_hits]
     rescue
-      rate_limit_status = '---'
+      remaining_hits = '---'
     end
 
     job = Bucket.find_by_serial(@user_profile[:twitter_id]) || (raise StandardError)
     @stats = {
       :destroy_count  => job.destroy_count,
-      :remaining_hits => rate_limit_status,
+      :remaining_hits => remaining_hits,
       :elapsed_time   => job.elapsed_time,
       :page           => job.page,
+      :max_id         => job.max_id,
       :auth_failed_count => job.auth_failed_count,
       :busyness       => Bucket.busyness,
     }
@@ -79,6 +80,7 @@ class CleanersController < ApplicationController
       :remaining_hits => '---',
       :elapsed_time   => '---',
       :page           => '---',
+      :max_id         => '---',
       :auth_failed_count => '---',
       :busyness       => '---',
     }
@@ -98,6 +100,14 @@ class CleanersController < ApplicationController
 
     respond_to do |format|
       format.html
+    end
+
+  rescue Twitter::Error::BadRequest => ex
+    reset_session
+    flash[:notice] = 'APIの利用可能回数が足りません。<br>回復するまで削除登録できません。'
+
+    respond_to do |format|
+      format.html { redirect_to root_path }
     end
 
   rescue => ex
@@ -121,6 +131,7 @@ class CleanersController < ApplicationController
         :serial => @user_profile[:twitter_id],
         :token  => @user_profile[:access_token],
         :secret => @user_profile[:access_token_secret],
+        :max_id => @user_profile[:max_id],
         :auth_failed_count => 0,
       })
     end
@@ -133,7 +144,7 @@ class CleanersController < ApplicationController
     ExceptionNotifier::Notifier.exception_notification(request.env, ex).deliver
 
     reset_session
-    flash[:notice] = '削除を開始できませんでした。'
+    flash[:notice]  = '削除を開始できませんでした。'
 
     respond_to do |format|
       format.html { redirect_to root_path }

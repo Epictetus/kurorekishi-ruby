@@ -11,19 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120403042828) do
+ActiveRecord::Schema.define(:version => 20120316140030) do
 
   create_table "buckets", :force => true do |t|
     t.string   "serial",                           :null => false
     t.string   "token",                            :null => false
     t.string   "secret",                           :null => false
-    t.integer  "page",              :default => 1
     t.string   "max_id"
+    t.integer  "page",              :default => 0
     t.integer  "destroy_count",     :default => 0
-    t.datetime "last_processed_at"
+    t.datetime "reset_at"
+    t.integer  "auth_failed_count", :default => 0
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
-    t.integer  "auth_failed_count", :default => 0
   end
 
   add_index "buckets", ["serial"], :name => "index_buckets_on_serial", :unique => true
