@@ -50,16 +50,10 @@ class CleanersController < ApplicationController
     set_user_profile
     twitter = twitter_from_session
 
-    begin
-      remaining_hits = twitter.rate_limit_status[:remaining_hits]
-    rescue
-      remaining_hits = '---'
-    end
-
     job = Bucket.find_by_serial(@user_profile[:twitter_id]) || (raise StandardError)
     @stats = {
       :destroy_count  => job.destroy_count,
-      :remaining_hits => remaining_hits,
+      :remaining_hits => job.reseted_time,
       :elapsed_time   => job.elapsed_time,
       :page           => job.page,
       :max_id         => job.max_id,

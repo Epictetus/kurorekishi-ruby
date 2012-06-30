@@ -4,7 +4,7 @@ class CreateBuckets < ActiveRecord::Migration
       t.string   :serial, :null => false
       t.string   :token,  :null => false
       t.string   :secret, :null => false
-      t.string   :max_id
+      t.string   :max_id, :null => false, :default => '0'
       t.integer  :page, :default => 0
       t.integer  :destroy_count, :default => 0
       t.datetime :reset_at
