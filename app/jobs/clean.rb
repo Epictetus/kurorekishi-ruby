@@ -15,8 +15,47 @@ class Clean
       end
     end
 
+    # TL取得 -------------------------------------------------------------------
+    timelines = get_timelines
+
     # ツイート削除 -----------------------------------------------------------------
+    results = destroy_timelines(timelines)
+
+    # 統計情報更新 -----------------------------------------------------------------
+    results.each do |result|
+      result[:job].increment!(:page)
+      result[:job].increment!(:destroy_count, result[:destroy_count])
+      Stats.store!(result[:job].serial, result[:destroy_count])
+    end
+
+    nil
+  end
+
+  ############################################################################
+  protected
+
+  def self.destroy_timelines(timelines)
     results = Array.new
+
+    timelines.each do |timeline|
+      count = 0
+      ts = Array.new
+      timeline[:timeline].each do |status|
+        ts << Thread.new do
+          twitter = twitter_client(timeline[:job].token, timeline[:job].secret)
+          twitter.status_destroy(status.id, { :trim_user => true })
+          count += 1
+        end
+      end
+      ts.each{|t| t.join }
+      results << { :job => timeline[:job], :destroy_count => count }
+    end
+
+    results
+  end
+
+  def self.get_timelines
+    timelines = Array.new
 
     ts = Array.new
     Bucket.active_jobs.each do |job|
@@ -38,19 +77,7 @@ class Clean
             :trim_user   => true,
           })
 
-          # ツイート削除
-          count = 0
-          ts2 = Array.new
-          timeline.each do |status|
-            ts2 << Thread.new do
-              twitter.status_destroy(status.id, { :trim_user => true })
-              count += 1
-            end
-          end
-          ts2.each{|t| t.join }
-
-          # 統計情報保存
-          results << { :job => job, :destroy_count => count }
+          timelines << { :job => job, :timeline => timeline }
         rescue Twitter::Error::Unauthorized => ex
           job.increment!(:auth_failed_count)
           raise ex
@@ -59,14 +86,7 @@ class Clean
     end
     ts.each{|t| t.join }
 
-    # 統計情報更新 -----------------------------------------------------------------
-    results.each do |result|
-      result[:job].increment!(:page)
-      result[:job].increment!(:destroy_count, result[:destroy_count])
-      Stats.store!(result[:job].serial, result[:destroy_count])
-    end
-
-    nil
+    timelines
   end
 
   ############################################################################
