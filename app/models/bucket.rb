@@ -24,7 +24,7 @@
 class Bucket < ActiveRecord::Base
   ############################################################################
   scope :active_jobs, lambda {
-    where(['reset_at IS NULL AND page < 200 AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
+    where(['reset_at IS NULL AND page < 160 AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
   }
   scope :inactive_jobs, lambda {
     where(['reset_at IS NOT NULL AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
@@ -39,9 +39,9 @@ class Bucket < ActiveRecord::Base
 
   def self.busyness
     job = Bucket.active_jobs.order('updated_at DESC').first
-    if job.blank? || job.updated_at >= 7.minutes.ago
+    if job.blank? || job.updated_at >= 5.minutes.ago
       busyness = '空き'
-    elsif job.updated_at >= 14.minutes.ago
+    elsif job.updated_at >= 10.minutes.ago
       busyness = '普通'
     else
       busyness = '混雑'

@@ -42,8 +42,7 @@ class Clean
       ts = Array.new
       timeline[:timeline].each do |status|
         ts << Thread.new do
-          twitter = twitter_client(timeline[:job].token, timeline[:job].secret)
-          twitter.status_destroy(status.id, { :trim_user => true })
+          timeline[:twitter].status_destroy(status.id, { :trim_user => true })
           count += 1
         end
       end
@@ -58,11 +57,11 @@ class Clean
     timelines = Array.new
 
     ts = Array.new
-    Bucket.active_jobs.limit(5).each do |job|
+    Bucket.active_jobs.limit(3).each do |job|
       job.update_attributes!({ :updated_at => DateTime.now })
       ts << Thread.new do
-        twitter = twitter_client(job.token, job.secret)
         begin
+          twitter = twitter_client(job.token, job.secret)
           # API制限
           rate_limit_status = twitter.rate_limit_status
           if rate_limit_status[:remaining_hits] <= 30
@@ -73,12 +72,12 @@ class Clean
           # 処理対象のタイムライン取得
           timeline = twitter.user_timeline(job.serial.to_i, {
             :max_id      => [2**61, job.max_id.to_i].min,
-            :count       => 20,
+            :count       => 50,
             :include_rts => true,
             :trim_user   => true,
           })
 
-          timelines << { :job => job, :timeline => timeline }
+          timelines << { :job => job, :twitter => twitter, :timeline => timeline }
         rescue Twitter::Error::Unauthorized => ex
           job.increment!(:auth_failed_count)
           raise ex
