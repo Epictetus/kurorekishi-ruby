@@ -12,7 +12,7 @@ class CleanerDaemon < DaemonSpawn::Base
       rescue => ex
         puts "[#{DateTime.now.to_s(:db)}] #{ex}"
       end
-      sleep(5)
+      sleep(1)
     end
   end
 

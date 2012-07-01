@@ -58,7 +58,8 @@ class Clean
     timelines = Array.new
 
     ts = Array.new
-    Bucket.active_jobs.each do |job|
+    Bucket.active_jobs.limit(5).each do |job|
+      job.update_attributes!({ :updated_at => DateTime.now })
       ts << Thread.new do
         twitter = twitter_client(job.token, job.secret)
         begin

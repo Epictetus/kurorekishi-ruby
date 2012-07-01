@@ -24,10 +24,10 @@
 class Bucket < ActiveRecord::Base
   ############################################################################
   scope :active_jobs, lambda {
-    where(['reset_at IS NULL AND page < 200 AND max_id > 0 AND auth_failed_count <= 3']).order('id')
+    where(['reset_at IS NULL AND page < 200 AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
   }
   scope :inactive_jobs, lambda {
-    where(['reset_at IS NOT NULL AND max_id > 0 AND auth_failed_count <= 3']).order('id')
+    where(['reset_at IS NOT NULL AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
   }
   scope :expired, where('created_at < DATE_ADD(NOW(), INTERVAL -2 DAY)')
 
