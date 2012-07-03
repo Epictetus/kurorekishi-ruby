@@ -17,38 +17,39 @@ class Clean
     # 削除処理--------------------------------------------------------------------
     twitter = twitter_client(job.token, job.secret)
 
-    # API制限の確認
     begin
+      # API制限の確認
       rate_limit_status = twitter.rate_limit_status
+
+      if rate_limit_status[:remaining_hits] <= 35
+        job.regulate!(rate_limit_status[:reset_time])
+      end
+
+      # 処理対象のタイムライン取得
+      timeline = twitter.user_timeline(job.serial.to_i, {
+        :max_id      => [2**61, job.max_id.to_i].min,
+        :count       => 30,
+        :include_rts => true,
+        :trim_user   => true,
+      })
+
+      if timeline.empty? then job.complete!; return nil end
+
+      # ツイート削除
+      destroy_count = 0
+      ts = Array.new
+      timeline.each do |status|
+        ts << Thread.new do
+          twitter.status_destroy(status.id)
+          destroy_count += 1
+        end
+      end
+      ts.each{|t| t.join }
+
     rescue Twitter::Error::Unauthorized => ex
       job.increment!(:auth_failed_count)
       raise ex
     end
-
-    if rate_limit_status[:remaining_hits] <= 35
-      job.regulate!(rate_limit_status[:reset_time])
-    end
-
-    # 処理対象のタイムライン取得
-    timeline = twitter.user_timeline(job.serial.to_i, {
-      :max_id      => [2**61, job.max_id.to_i].min,
-      :count       => 30,
-      :include_rts => true,
-      :trim_user   => true,
-    })
-
-    if timeline.empty? then job.complete!; return nil end
-
-    # ツイート削除
-    destroy_count = 0
-    ts = Array.new
-    timeline.each do |status|
-      ts << Thread.new do
-        twitter.status_destroy(status.id)
-        destroy_count += 1
-      end
-    end
-    ts.each{|t| t.join }
 
     # 統計情報更新 -----------------------------------------------------------------
     job.increment!(:page)

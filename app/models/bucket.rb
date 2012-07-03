@@ -29,12 +29,14 @@ class Bucket < ActiveRecord::Base
   scope :not_completed, where('page < 160')
   scope :auth_failed, where('auth_failed_count > 3')
   scope :auth_not_failed, where('auth_failed_count <= 3')
+  scope :not_empty, where('max_id > 0')
   scope :faraway, order('updated_at')
 
   ############################################################################
 
   def self.next_job
-    Bucket.not_regulated.not_completed.auth_not_failed.faraway.first
+    Bucket.not_regulated.not_completed.auth_not_failed.not_empty \
+          .faraway.where(['updated_at <= ?', 15.second.ago]).first
   end
 
   def self.deregulation_jobs
