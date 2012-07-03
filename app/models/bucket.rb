@@ -47,7 +47,7 @@ class Bucket < ActiveRecord::Base
 
   ############################################################################
 
-  def count_active_job
+  def self.count_active_job
     Bucket.not_completed.auth_not_failed.count
   end
 
