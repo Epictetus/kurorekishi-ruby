@@ -37,6 +37,8 @@ class Clean
       :trim_user   => true,
     })
 
+    if timeline.empty? then job.complete!; return nil end
+
     # ツイート削除
     destroy_count = 0
     ts = Array.new

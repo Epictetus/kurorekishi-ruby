@@ -77,6 +77,10 @@ class Bucket < ActiveRecord::Base
     update_attributes!({ :reset_at => nil })
   end
 
+  def complete!
+    update_attributes!({ :page => 999 })
+  end
+
   ############################################################################
 
   def done?
