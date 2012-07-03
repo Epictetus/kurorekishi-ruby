@@ -22,7 +22,7 @@ class CleanersController < ApplicationController
     @cleaners = {
       :destroy_count => Stats.fetch[:destroy_count],
       :users_count   => Stats.fetch[:users_count],
-      :target_count  => Bucket.count_job,
+      :target_count  => Bucket.active_job_count,
       :busyness      => Bucket.busyness,
     }
 

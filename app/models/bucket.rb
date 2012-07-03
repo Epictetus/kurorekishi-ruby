@@ -23,22 +23,36 @@
 
 class Bucket < ActiveRecord::Base
   ############################################################################
-  scope :active_jobs, lambda {
-    where(['reset_at IS NULL AND page < 160 AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
-  }
-  scope :inactive_jobs, lambda {
-    where(['reset_at IS NOT NULL AND max_id > 0 AND auth_failed_count <= 3']).order('updated_at')
-  }
-  scope :expired, where('created_at < DATE_ADD(NOW(), INTERVAL -2 DAY)')
+  scope :regulated, where('reset_at IS NOT NULL')
+  scope :not_regulated, where('reset_at IS NULL')
+  scope :completed, where('page => 160')
+  scope :not_completed, where('page < 160')
+  scope :auth_failed, where('auth_failed_count > 3')
+  scope :auth_not_failed, where('auth_failed_count <= 3')
+  scope :faraway, order('updated_at')
 
   ############################################################################
 
-  def self.count_job
-    Bucket.where('auth_failed_count <= 3').count
+  def self.next_job
+    Bucket.not_regulated.not_completed.auth_not_failed.faraway.first
+  end
+
+  def self.deregulation_jobs
+    Bucket.where(['reset_at <= ?', DateTime.now])
+  end
+
+  def self.expired_jobs
+    Bucket.where('created_at < DATE_ADD(NOW(), INTERVAL -2 DAY)')
+  end
+
+  ############################################################################
+
+  def count_active_job
+    Bucket.not_completed.auth_not_failed.count
   end
 
   def self.busyness
-    job = Bucket.active_jobs.order('updated_at DESC').first
+    job = Bucket.next_job
     if job.blank? || job.updated_at >= 5.minutes.ago
       busyness = '空き'
     elsif job.updated_at >= 10.minutes.ago
@@ -49,6 +63,19 @@ class Bucket < ActiveRecord::Base
     busyness
   end
 
+  ############################################################################
+
+  def touch!
+    update_attributes!({ :updated_at => DateTime.now })
+  end
+
+  def regulate!(reset_time)
+    update_attributes!({ :reset_at => reset_time })
+  end
+
+  def deregulate!
+    update_attributes!({ :reset_at => nil })
+  end
 
   ############################################################################
 

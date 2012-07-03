@@ -4,89 +4,56 @@ class Clean
 
   def self.perform
     # 期限切れジョブの削除 -------------------------------------------------------------
-    Bucket.expired.each do |job|
-      job.destroy
-    end
+    Bucket.expired_jobs.each{|job| job.destroy }
 
     # API切れジョブのリセット ----------------------------------------------------------
-    Bucket.inactive_jobs.each do |job|
-      if job.reset_at <= DateTime.now
-        job.update_attributes!({ :reset_at => nil })
-      end
+    Bucket.deregulation_jobs.each{|job| job.deregulate! }
+
+    # 処理対象ジョブ取得 --------------------------------------------------------------
+    job = Bucket.next_job
+    if job.blank? then return nil end
+    job.touch!
+
+    # 削除処理--------------------------------------------------------------------
+    twitter = twitter_client(job.token, job.secret)
+
+    # API制限の確認
+    begin
+      rate_limit_status = twitter.rate_limit_status
+    rescue Twitter::Error::Unauthorized => ex
+      job.increment!(:auth_failed_count)
+      raise ex
     end
 
-    # TL取得 -------------------------------------------------------------------
-    timelines = get_timelines
-
-    # ツイート削除 -----------------------------------------------------------------
-    results = destroy_timelines(timelines)
-
-    # 統計情報更新 -----------------------------------------------------------------
-    results.each do |result|
-      result[:job].increment!(:page)
-      result[:job].increment!(:destroy_count, result[:destroy_count])
-      Stats.store!(result[:job].serial, result[:destroy_count])
+    if rate_limit_status[:remaining_hits] <= 35
+      job.regulate!(rate_limit_status[:reset_time])
     end
 
-    nil
-  end
+    # 処理対象のタイムライン取得
+    timeline = twitter.user_timeline(job.serial.to_i, {
+      :max_id      => [2**61, job.max_id.to_i].min,
+      :count       => 30,
+      :include_rts => true,
+      :trim_user   => true,
+    })
 
-  ############################################################################
-  protected
-
-  def self.destroy_timelines(timelines)
-    results = Array.new
-
-    timelines.each do |timeline|
-      count = 0
-      ts = Array.new
-      timeline[:timeline].each do |status|
-        ts << Thread.new do
-          timeline[:twitter].status_destroy(status.id, { :trim_user => true })
-          count += 1
-        end
-      end
-      ts.each{|t| t.join }
-      results << { :job => timeline[:job], :destroy_count => count }
-    end
-
-    results
-  end
-
-  def self.get_timelines
-    timelines = Array.new
-
+    # ツイート削除
+    destroy_count = 0
     ts = Array.new
-    Bucket.active_jobs.limit(3).each do |job|
-      job.update_attributes!({ :updated_at => DateTime.now })
+    timeline.each do |status|
       ts << Thread.new do
-        begin
-          twitter = twitter_client(job.token, job.secret)
-          # API制限
-          rate_limit_status = twitter.rate_limit_status
-          if rate_limit_status[:remaining_hits] <= 30
-            job.update_attributes!({ :reset_at => rate_limit_status[:reset_time] })
-            next
-          end
-
-          # 処理対象のタイムライン取得
-          timeline = twitter.user_timeline(job.serial.to_i, {
-            :max_id      => [2**61, job.max_id.to_i].min,
-            :count       => 50,
-            :include_rts => true,
-            :trim_user   => true,
-          })
-
-          timelines << { :job => job, :twitter => twitter, :timeline => timeline }
-        rescue Twitter::Error::Unauthorized => ex
-          job.increment!(:auth_failed_count)
-          raise ex
-        end
+        twitter.status_destroy(status.id)
+        destroy_count += 1
       end
     end
     ts.each{|t| t.join }
 
-    timelines
+    # 統計情報更新 -----------------------------------------------------------------
+    job.increment!(:page)
+    job.increment!(:destroy_count, destroy_count)
+    Stats.store!(job.serial, destroy_count)
+
+    nil
   end
 
   ############################################################################
