@@ -28,13 +28,10 @@
               = ' 削除数:'
               = content_tag :span, '---', :id => 'destroy_count'
             %span.label.label-info<
-              = '待機:'
+              = 'API残:'
               = content_tag :span, '---', :id => 'remaining_hits'
             %span.label.label-info<
-              = '経過:'
-              = content_tag :span, '---', :id => 'elapsed_time'
-            %span.label.label-info<
-              = 'ページ:'
-              = content_tag :span, '---', :id => 'page'
+              = '回復まで'
+              = content_tag :span, '---', :id => 'reset_time'
         .help-link
           = link_to '削除処理を完了する', cleaner_path, :method => :delete, :confirm => '削除処理を完了します。よろしいですか？'

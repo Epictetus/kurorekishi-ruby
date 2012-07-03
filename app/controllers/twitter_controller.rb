@@ -27,7 +27,7 @@ class TwitterController < ApplicationController
         session[:user_profile] = {
           :twitter_id          => twitter.user.id,
           :twitter_screen_name => twitter.user.screen_name,
-          :max_id              => twitter.user_timeline.first.try(:id),
+          :max_id              => twitter.user_timeline.first.try(:id) || '0',
           :access_token        => session[:access_token],
           :access_token_secret => session[:access_token_secret],
         }

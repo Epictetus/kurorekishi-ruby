@@ -10,7 +10,7 @@
           success: function(data, status, xhr) {
             $('#destroy_count').html(data['destroy_count']);
             $('#remaining_hits').html(data['remaining_hits']);
-            $('#elapsed_time').html(data['elapsed_time']);
+            $('#reset_time').html(data['reset_time']);
             $('#page').html(data['page']);
             $('#progress > .bar').width((data['page'] / 160 * 100) + '%');
             if (data['destroy_count'] != 0) {

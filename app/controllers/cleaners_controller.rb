@@ -22,7 +22,7 @@ class CleanersController < ApplicationController
     @cleaners = {
       :destroy_count => Stats.fetch[:destroy_count],
       :users_count   => Stats.fetch[:users_count],
-      :target_count  => Bucket.active_job_count,
+      :target_count  => Bucket.count_active_job,
       :busyness      => Bucket.busyness,
     }
 
@@ -53,8 +53,8 @@ class CleanersController < ApplicationController
     job = Bucket.find_by_serial(@user_profile[:twitter_id]) || (raise StandardError)
     @stats = {
       :destroy_count  => job.destroy_count,
-      :remaining_hits => job.reseted_time,
-      :elapsed_time   => job.elapsed_time,
+      :remaining_hits => twitter.rate_limit_status[:remaining_hits],
+      :reset_time   => job.reset_time,
       :page           => job.page,
       :max_id         => job.max_id,
       :auth_failed_count => job.auth_failed_count,
@@ -72,7 +72,7 @@ class CleanersController < ApplicationController
     @stats = {
       :destroy_count  => '---',
       :remaining_hits => '---',
-      :elapsed_time   => '---',
+      :reset_time     => '---',
       :page           => '---',
       :max_id         => '---',
       :auth_failed_count => '---',

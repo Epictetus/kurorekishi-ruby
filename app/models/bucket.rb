@@ -87,8 +87,8 @@ class Bucket < ActiveRecord::Base
     '%sH' % ((Time.now - created_at.to_time) / (60 * 60)).truncate
   end
 
-  def reseted_time
-    '@%sM' % (reset_at.present? ? ((reset_at.to_time - Time.now) / 60).truncate : 0)
+  def reset_time
+    '@%s分' % (reset_at.present? ? ((reset_at.to_time - Time.now) / 60).truncate : 0)
   end
 
   ############################################################################
