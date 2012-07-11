@@ -23,6 +23,7 @@ class Clean
 
       if rate_limit_status[:remaining_hits] <= 35
         job.regulate!(rate_limit_status[:reset_time])
+        return nil
       end
 
       # 処理対象のタイムライン取得

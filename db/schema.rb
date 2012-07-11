@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120316140030) do
+ActiveRecord::Schema.define(:version => 20120703210826) do
 
   create_table "buckets", :force => true do |t|
     t.string   "serial",                           :null => false
@@ -41,5 +41,19 @@ ActiveRecord::Schema.define(:version => 20120316140030) do
     t.datetime "created_at",                                       :null => false
     t.datetime "updated_at",                                       :null => false
   end
+
+  create_table "warehouses", :force => true do |t|
+    t.string   "serial",                                                 :null => false
+    t.string   "token",                                                  :null => false
+    t.string   "secret",                                                 :null => false
+    t.string   "since_id",                              :default => "0", :null => false
+    t.datetime "reset_at"
+    t.integer  "auth_failed_count",                     :default => 0
+    t.text     "statuses",          :limit => 16777215
+    t.datetime "created_at",                                             :null => false
+    t.datetime "updated_at",                                             :null => false
+  end
+
+  add_index "warehouses", ["serial"], :name => "index_warehouses_on_serial", :unique => true
 
 end
